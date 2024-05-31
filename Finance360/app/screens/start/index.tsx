@@ -1,7 +1,7 @@
-import Logo from "././components/logo";
+import Logo from "./components/logo";
 import {View, StyleSheet} from 'react-native';
-import Quote from "././components/quote";
-import Button from "././components/button";
+import Quote from "./components/quote";
+import Button from "./components/button";
 
 const Start = () => {
     return (
@@ -22,6 +22,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         
     },
+
+    container2: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+    },
 });
 
-export default Start
+export default Start;
