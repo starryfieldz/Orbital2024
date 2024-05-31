@@ -3,12 +3,13 @@ import {View, StyleSheet} from 'react-native';
 import Quote from "./components/quote";
 import Button from "./components/button";
 
-const Start = () => {
+
+const Start = ( { navigation }) => {
     return (
         <View>
             <Logo />
             <Quote />
-            <Button />
+            <Button navigation = {navigation} />
         </View>
     );
 };
