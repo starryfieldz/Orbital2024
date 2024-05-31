@@ -5,11 +5,11 @@ import Icon from "react-native-vector-icons/FontAwesome6";
 
 const NavigationTab = () => {
     const tabs = [
-        { name: "Expenses", icon: "dollar-sign", path: "../../screens/credentials" },
-        { name: "Budgeting", icon: "calendar-days", path: "/profile-screen" },
-        { name: "Bills", icon: "money-bill", path: "/settings-screen" },
-        { name: "Portfolio", icon: "briefcase", path: "/logout-screen" },
-        { name: "Stock", icon: "arrow-trend-up", path: "/favourites-screen" },
+        { name: "Expenses", icon: "dollar-sign", path: "./screens/credentials" },
+        { name: "Budgeting", icon: "calendar-days", path: "./screens/credentials" },
+        { name: "Bills", icon: "money-bill", path: "./screens/credentials" },
+        { name: "Portfolio", icon: "briefcase", path: "./screens/credentials" },
+        { name: "Stock", icon: "arrow-trend-up", path: "./screens/credentials" },
     ];
 
     return (
@@ -29,7 +29,7 @@ const NavigationTab = () => {
 const styles = StyleSheet.create({
     container: {
         position: 'relative',
-        bottom: -150,
+        bottom: -185,
         flexDirection: 'row', // Horizontal layout
         justifyContent: 'space-around', // Evenly distribute tabs
         paddingVertical: 10,
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 14,
-        color: 'white',
+        color: 'black',
          // Adjust text size
     },
 });
