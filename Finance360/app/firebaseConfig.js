@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import {getAuth} from 'firebase/auth';
 import {getFirestore} from 'firebase/firestore';
-
+import { getDatabase } from 'firebase/database'; 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -15,10 +15,12 @@ const firebaseConfig = {
   storageBucket: "finance360-7e990.appspot.com",
   messagingSenderId: "660957544396",
   appId: "1:660957544396:web:df4b8ef250f30f47d6a769",
-  measurementId: "G-D5NFPRLTNL"
+  measurementId: "G-D5NFPRLTNL",
+  databaseURL: "https://finance360-7e990-default-rtdb.asia-southeast1.firebasedatabase.app",
 };
 
 // Initialize Firebase
 export const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
 export const FIRESTORE_DB = getFirestore(FIREBASE_APP);
+export const DATABASE = getDatabase(FIREBASE_APP);

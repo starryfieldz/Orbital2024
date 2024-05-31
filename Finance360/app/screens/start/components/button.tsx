@@ -2,8 +2,8 @@ import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
 
-const Button = () => {
-    const keyA = "Login";
+const Button = ( { navigation }) => {
+    /* const keyA = "Login";
     const link = './screens/credentials';
     return (
         <View style={styles.button}>
@@ -14,7 +14,16 @@ const Button = () => {
             </Link>
         </View>
     );
-}
+    */
+    return (
+        <View style={styles.button}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+        </View>
+    );
+};
+
 const HandlePress = () => {
     console.log("User logging in");
 };
