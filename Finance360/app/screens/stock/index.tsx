@@ -1,14 +1,36 @@
-import { ScrollView, View, Text } from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import NavigationTab from "../../../components/navigation/navigation";
 
 
-const Stock = ( {navigation} ) => {
+const Stock = ({navigation}) => {
     return (
-        <ScrollView>
-            <Text> Stock</Text>
-            <NavigationTab navigation = {navigation}/>
-        </ScrollView>
+        <View style = {styles.container}>
+            <View>
+                <Text> Stock</Text>
+            </View>
+            <ScrollView contentContainerStyle = {styles.scrollViewContent}>
+                <Text> to be done up </Text>
+            </ScrollView>
+            <View style = {styles.navigationTab}>
+                <NavigationTab navigation = {navigation} />
+            </View>
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+    },
+    navigationTab: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+});
 
 export default Stock;

@@ -38,18 +38,14 @@ const NavigationTab = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        bottom: -185,
-        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-around',
         paddingVertical: 10,
-        backgroundColor: '#fff',
-        borderTopWidth: 1,
-        borderTopColor: '#ccc', // Optional: Adds a border to the top of the tab for separation
+        backgroundColor: '#fff', // Adjust background as needed
     },
     link: {
         flex: 1,
+        alignItems: 'center',
     },
     tab: {
         alignItems: 'center',
@@ -62,7 +58,6 @@ const styles = StyleSheet.create({
         color: 'black',
     },
 });
-
 
 export default NavigationTab;
 
