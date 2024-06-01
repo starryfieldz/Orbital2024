@@ -9,22 +9,22 @@ const AddingExpenseButton = ( {navigation} ) => (
     <View style = {styles.container}>
         <TouchableOpacity onPress = {() => navigation.navigate('addExpenseDetails')}>
             <Text style = {styles.text}> + </Text>
-        </TouchableOpacity> 
+        </TouchableOpacity>  
     </View>
 );
 
 const styles = StyleSheet.create({
     text: {
         color : "white",
-        fontSize : 60,
+        fontSize : 50,
         fontFamily : 'calibri',
     },
 
     container : { 
         backgroundColor: 'black',
         paddingVertical: 0,
-        paddingHorizontal: 0,
-        borderRadius: 30,
+        paddingHorizontal: 2,
+        borderRadius: 20,
         alignSelf: 'center',
 
     }

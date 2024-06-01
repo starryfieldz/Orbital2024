@@ -31,7 +31,7 @@ const Title = ( {userId} ) => {
 
 
     return (
-        <View> 
+        <View style = {styles.container}> 
            <Text style = {styles.text}> Hello {email} </Text>
         </View>
     );
@@ -47,6 +47,12 @@ const styles = StyleSheet.create({
         fontSize : 20,
         fontStyle : 'italic',
         fontWeight : 'bold',
+    },
+    container : {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderColor: "black",
+        borderTopWidth: 1
     }
 });
 
