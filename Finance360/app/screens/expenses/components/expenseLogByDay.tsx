@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
+import { format, subMonths, addMonths } from 'date-fns';
 
 function TotalPerDay(expenses) {
     let output = 0;
@@ -16,7 +17,7 @@ const ExpenseLogByDay = ({date, expenses}) => {
     return (
         <View style={styles.container}>
             <View style={styles.dateSection}>
-                <Text style={styles.dateText}>{date}</Text>
+                <Text style={styles.dateText}>{format(date, "MMM dd")}</Text>
             </View>
             {Object.keys(expenses).map((category) => (
                 <View key={category} style={styles.categorySection}>
@@ -35,7 +36,14 @@ const ExpenseLogByDay = ({date, expenses}) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10,
+        padding: 20,
+        borderColor: "black",
+        borderTopWidth: 3,
+        borderBottomWidth: 3,
+        borderLeftWidth: 3,
+        borderRightWidth: 3,
+        margin: 5
+
     },
     dateSection: {
         marginVertical: 10,
@@ -45,7 +53,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     categorySection: {
-        paddingVertical: 5,
+        paddingVertical: 10,
     },
     categoryText: {
         fontSize: 16,

@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import ExpenseLogByDay from './expenseLogByDay';
+import { format, subMonths, addMonths } from 'date-fns';
 
-const getExpensesForMonth = ({data, month}) => {
+const FilterExpensesForMonth = ({data, currentMonth}) => {
     const expensesForMonth = {};
     for (let date in data) {
-        if (date.startsWith(month)) {
+        if (date.startsWith(format(currentMonth, "yyyy-MM"))) {
             expensesForMonth[date] = data[date];
         }
     }
     return expensesForMonth;
 };
-const ExpenseLog = ({ userId, month }) => {
+const ExpenseLog = ({ userId, currentMonth }) => {
     const [expenses, setExpenses] = useState({});
 
     useEffect(() => {
@@ -21,15 +22,16 @@ const ExpenseLog = ({ userId, month }) => {
         
         onValue(expensesRef, (snapshot) => {
             const data = snapshot.val();
-            const filteredExpenses = getExpensesForMonth({data, month});
+            const filteredExpenses = FilterExpensesForMonth({data, currentMonth});
             setExpenses(filteredExpenses);
         });
-    }, [userId, month]);
+    }, [userId, currentMonth]);
 
     return (
         <ScrollView style={styles.container}>
+            <Text style = {styles.headerText}> See all expenses for {format(currentMonth, "MMM yyyy")}</Text>
             {Object.keys(expenses).length == 0 ? (
-                <Text>No expenses recorded for {month}</Text>
+                <Text style = {styles.message}>No spending yet!</Text>
             ) : (
                 Object.keys(expenses).map((date) => (
                     <ExpenseLogByDay date = {date} expenses={expenses[date]} />
@@ -41,26 +43,19 @@ const ExpenseLog = ({ userId, month }) => {
 
 const styles = StyleSheet.create({
     container: {
-    padding: 10,
+        paddingHorizontal: 10
     },
-    dateSection: {
-    marginVertical: 10,
-    },
-    dateText: {
+    headerText: {
         fontSize: 18,
         fontWeight: 'bold',
+        textAlign: "center",
+        padding: 10,      
     },
-    categorySection: {
-        paddingVertical: 5,
+
+    message: {
+        fontSize: 15,
+        textAlign: "center",      
     },
-    categoryText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'darkgreen',
-    },
-    expenseDetail: {
-        paddingLeft: 10,
-    },
-    });
+});
 
 export default ExpenseLog;

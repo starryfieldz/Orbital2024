@@ -1,0 +1,67 @@
+{
+  "users": {
+    "swiBWFhE0MfITJFBLY1n7rx1YF92": {
+      "createdAt": "2024-05-31T17:17:15.983Z",
+      "email": "dillonphang@gmail.com",
+      "expenses": {
+        "2024-06-01": {
+          "Food": {
+            "def123": {
+              "amount": 90,
+              "name": "Lunch"
+            },
+            "def789": {
+              "amount": 20,
+              "name": "Dinner"
+            }
+          },
+          "Necessity": {
+            "def125": {
+              "amount": 200,
+              "name": "medicine"
+            },
+            "def689": {
+              "amount": 30,
+              "name": "water"
+            }
+          }
+        },
+        "2024-06-02": {
+          "Clothes": {
+            "abc124": {
+              "amount": 150,
+              "name": "uniqlo"
+            },
+            "abc234": {
+              "amount": 200,
+              "name": "H&M"
+            }
+          },
+          "Food": {
+            "abc123": {
+              "amount": 100,
+              "name": "Lunch"
+            },
+            "abd789": {
+              "amount": 20,
+              "name": "Dinner"
+            }
+          },
+          "Necessity": {
+            "abc125": {
+              "amount": 200,
+              "name": "medicine"
+            }
+          },
+          "Subscriptions": {
+            "abc126": {
+              "amount": 50,
+              "name": "netflix"
+            }
+          }
+        }
+      },
+      "password": "123456"
+    }
+  }
+}
