@@ -7,9 +7,11 @@ import Portfolio from "./screens/portfolio";
 import Bills from "./screens/bills";
 import Stock from './screens/stock';
 import Budgeting from './screens/budgeting';
+import addExpenseDetails from "./screens/addExpenseDetails";
 import NavigationTab from '../components/navigation/navigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 
 
 const Stack = createStackNavigator();
@@ -24,6 +26,7 @@ export default function Index() {
             <Stack.Screen name="Budgeting" component={Budgeting} />
             <Stack.Screen name="Stock" component={Stock} />
             <Stack.Screen name="Portfolio" component={Portfolio} />
+            <Stack.Screen name="addExpenseDetails" component={addExpenseDetails} />
         </Stack.Navigator>
         // <Stack.Navigator initialRouteName = "NavigationTab">
         //   <Stack.Screen name="NavigationTab" component={NavigationTab} />
