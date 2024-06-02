@@ -174,7 +174,7 @@ import { ref, set, get, push } from 'firebase/database';
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { DATABASE } from '../../firebaseConfig';
 
-const addExpenseDetails = ({ navigation }) => {
+const AddExpenseDetails = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const [category, setCategory] = useState('');
   const [expenseName, setExpenseName] = useState('');
@@ -313,4 +313,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default addExpenseDetails;
+export default AddExpenseDetails;

@@ -7,7 +7,7 @@ import { View, TextInput, Button, Text, StyleSheet, ActivityIndicator, Touchable
 
 const AddingExpenseButton = ( {navigation} ) => (
     <View style = {styles.container}>
-        <TouchableOpacity onPress = {() => navigation.navigate('addExpenseDetails')}>
+        <TouchableOpacity onPress = {() => navigation.navigate('AddExpenseDetails')}>
             <Text style = {styles.text}> + </Text>
         </TouchableOpacity>  
     </View>
