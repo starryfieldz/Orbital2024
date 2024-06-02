@@ -249,6 +249,7 @@ const AddExpenseDetails = ({ navigation }) => {
         onChangeText={setExpenseName}
         value={expenseName}
         placeholder="Enter expense name"
+        placeholderTextColor="gray"
       />
 
       <Text style={styles.label}>Amount Spent:</Text>
@@ -258,6 +259,7 @@ const AddExpenseDetails = ({ navigation }) => {
         value={amountSpent}
         placeholder="Enter amount spent"
         keyboardType="numeric"
+        placeholderTextColor="gray"
       />
 
       <View style={styles.buttonContainer}>
