@@ -103,6 +103,7 @@ const Login = ( { navigation }) => {
                 onChangeText={setEmail}
                 autoCapitalize="none"
                 keyboardType="email-address"
+                placeholderTextColor="gray"
             />
             <TextInput
                 style={styles.input}
@@ -110,6 +111,7 @@ const Login = ( { navigation }) => {
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
+                placeholderTextColor="gray"
             />
             {loading ? (
                 <ActivityIndicator size="large" color="red" />
