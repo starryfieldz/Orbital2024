@@ -16,6 +16,8 @@ const Login = ( { navigation }) => {
 
     const getCustomErrorMessage = (errorCode) => {
         switch (errorCode) {
+            case 'auth/too-many-requests':
+                return 'Too many failed attempts. Try again later.'
             case 'auth/email-already-in-use':
                 return 'This email address is already in use.';
             case 'auth/invalid-email':
