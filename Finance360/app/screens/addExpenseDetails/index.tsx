@@ -59,6 +59,9 @@ const AddExpenseDetails = ({ navigation }) => {
     { label: 'Clothes', value: 'Clothes' },
     { label: 'Subscriptions', value: 'Subscriptions' },
     { label: 'Groceries', value: 'Groceries' },
+    { label: 'Transport', value: 'Transport' },
+    { label: 'Shopping', value: 'Shopping' },
+    { label: 'Social', value: 'Social' },
   ];
 
   const handleAmountChange = (inputValue) => {
