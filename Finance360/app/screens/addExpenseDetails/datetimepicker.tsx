@@ -7,7 +7,7 @@ const CustomDatePicker = ({ date, setDate }) => {
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShowDatePicker(Platform.OS === 'ios');
+    setShowDatePicker(Platform.OS === 'android');
     setDate(currentDate);
     setShowDatePicker(false);
   };

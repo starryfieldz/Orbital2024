@@ -1,34 +1,31 @@
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import Logo from "./components/logo";
-import {View, StyleSheet} from 'react-native';
 import Quote from "./components/quote";
-import Button from "./components/button";
+import LoginButton from "./components/loginButton";
+import SignupButton from "./components/signupButton";
 
-
-const Start = ( { navigation }) => {
+const Start = ({ navigation }) => {
     return (
-        <View>
+        <View style={styles.container}>
             <Logo />
             <Quote />
-            <Button navigation = {navigation} />
+            <LoginButton navigation={navigation} />
+            <View style={styles.signupContainer}>
+                <SignupButton navigation={navigation} />
+            </View>
         </View>
+
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'darkgreen',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 5,
-        alignSelf: 'center',
-        
-    },
-
-    container2: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 20,
+    },
+    signupContainer: {
+        paddingTop: 10, // Adjust this value to add padding from the bottom
     },
 });
 
