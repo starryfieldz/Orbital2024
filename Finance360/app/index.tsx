@@ -1,5 +1,4 @@
 import { ScrollView, Image, StyleSheet, Platform , Text, View, Button, TouchableOpacity} from 'react-native';
-import { Link } from 'expo-router';
 import Login from "./screens/login";
 import Expenses from "./screens/expenses";
 import Start from "./screens/start";
@@ -7,6 +6,7 @@ import Portfolio from "./screens/portfolio";
 import Bills from "./screens/bills";
 import Stock from './screens/stock';
 import Budgeting from './screens/budgeting';
+import SignupScreen from "./screens/signupScreen";
 import AddExpenseDetails from "./screens/addExpenseDetails";
 import NavigationTab from '../components/navigation/navigation';
 import { NavigationContainer } from '@react-navigation/native';
@@ -21,6 +21,7 @@ export default function Index() {
         <Stack.Navigator initialRouteName="Start">
             <Stack.Screen name="Start" component={Start} />
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="SignupScreen" component={SignupScreen} />
             <Stack.Screen name="Expenses" component={Expenses} />
             <Stack.Screen name="Bills" component={Bills} />
             <Stack.Screen name="Budgeting" component={Budgeting} />
