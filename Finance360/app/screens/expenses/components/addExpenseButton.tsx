@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 
-// const addingExpense = () => {
-//     console.log("User clicked the adding expense button.");
-// }
-
 const AddingExpenseButton = ( {navigation} ) => (
     <View style = {styles.container}>
         <TouchableOpacity onPress = {() => navigation.navigate('AddExpenseDetails')}>
