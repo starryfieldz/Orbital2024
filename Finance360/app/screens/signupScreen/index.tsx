@@ -61,7 +61,7 @@ const SignupScreen = ( { navigation }) => {
             });
             /*NEW*/
             console.log(response);
-            navigation.navigate('Expenses');
+            navigation.navigate('Budgeting');
         } catch (error) {
             setError(getCustomErrorMessage(error.code));
             console.log(error);

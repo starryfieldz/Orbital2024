@@ -16,12 +16,6 @@ const NavigationTab = ({ navigation }) => {
     return (
         <View style={styles.container}>
             {tabs.map((tab) => (
-                // <Link key={tab.name} href={tab.path} style={styles.link}>
-                //     <View style={styles.tab}>
-                //         <Icon name={tab.icon} size={30} style={styles.icon} />
-                //         <Text style={styles.text}>{tab.name}</Text>
-                //     </View>
-                // </Link>
                 <TouchableOpacity
                     key = {tab.name}
                     style = {styles.link}

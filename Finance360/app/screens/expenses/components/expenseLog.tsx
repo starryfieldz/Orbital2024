@@ -13,8 +13,20 @@ const FilterExpensesForMonth = ({data, currentMonth}) => {
     }
     return expensesForMonth;
 };
+
+const FilterIncomesForMonth= ({data, currentMonth}) => {
+    const incomesForMonth = {};
+    for (let date in data) {
+        if (date.startsWith(format(currentMonth, "yyyy-MM"))) {
+            incomesForMonth[date] = data[date];
+        }
+    }
+    return incomesForMonth;
+};
+
 const ExpenseLog = ({ userId, currentMonth }) => {
     const [expenses, setExpenses] = useState({});
+    const [incomes, setIncomes] = useState({});
 
     useEffect(() => {
         const db = getDatabase();
@@ -27,14 +39,26 @@ const ExpenseLog = ({ userId, currentMonth }) => {
         });
     }, [userId, currentMonth]);
 
+    useEffect(() => {
+        const db = getDatabase();
+        const incomesRef = ref(db, `users/${userId}/income`);
+        
+        onValue(incomesRef, (snapshot) => {
+            const data = snapshot.val();
+            const filteredIncomes = FilterIncomesForMonth({data, currentMonth});
+            setIncomes(filteredIncomes);
+        });
+    }, [userId, currentMonth]);
+
+    const allDates = Array.from(new Set([...Object.keys(expenses), ...Object.keys(incomes)])).sort();
     return (
         <ScrollView style={styles.container}>
-            <Text style = {styles.headerText}> See all expenses for {format(currentMonth, "MMM yyyy")}</Text>
-            {Object.keys(expenses).length == 0 ? (
-                <Text style = {styles.message}>No spending yet!</Text>
+            <Text style = {styles.headerText}> See all records for {format(currentMonth, "MMM yyyy")}</Text>
+            {allDates.length == 0 ? (
+                <Text style = {styles.message}>No expenses/incomes yet!</Text>
             ) : (
-                Object.keys(expenses).map((date) => (
-                    <ExpenseLogByDay date = {date} expenses={expenses[date]} />
+                allDates.map((date) => (
+                    <ExpenseLogByDay date = {date} expenses = {expenses[date]} incomes = {incomes[date]} />
                 ))
             )}
         </ScrollView>
