@@ -6,35 +6,35 @@ import { ref, set, get, push } from 'firebase/database';
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { DATABASE } from '../../firebaseConfig';
 
-const AddExpenseDetails = ({ navigation }) => {
+const AddIncomeDetails = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const [category, setCategory] = useState('');
-  const [expenseName, setExpenseName] = useState('');
-  const [amountSpent, setAmountSpent] = useState('');
+  const [incomeName, setIncomeName] = useState('');
+  const [amountSaved, setAmountSaved] = useState('');
   const userId = getId();
 
-  const saveExpense = async () => {
+  const saveIncome = async () => {
     if (!userId) {
       console.error('User not authenticated');
       return;
     }
 
-    if (!date || !category || !expenseName || !amountSpent) {
-      Alert.alert('Error', 'Fill in all fields before saving expense.');
+    if (!date || !category || !incomeName || !amountSaved) {
+      Alert.alert('Error', 'Fill in all fields before saving income.');
       return;
     }
 
-    const expenseDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-    const userExpensesRef = ref(DATABASE, `users/${userId}/expenses/${expenseDate}/${category}`);
+    const incomeDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+    const userIncomeRef = ref(DATABASE, `users/${userId}/income/${incomeDate}/${category}`);
 
     try {
       // Generate a unique key for the expense
-      const newExpenseRef = push(userExpensesRef);
+      const newIncomeRef = push(userIncomeRef);
 
       // Set the expense details under the specified category
-      await set(newExpenseRef, {
-        name: expenseName,
-        amount: parseFloat(amountSpent),
+      await set(newIncomeRef, {
+        name: incomeName,
+        amount: parseFloat(amountSaved),
       });
 
       console.log("Expense saved successfully");
@@ -44,7 +44,7 @@ const AddExpenseDetails = ({ navigation }) => {
       // Navigate back to the Expenses screen with the month and year parameters
       navigation.navigate('Expenses', { month, year });
     } catch (error) {
-      console.error("Error saving expense: ", error);
+      console.error("Error saving income: ", error);
     }
   };
 
@@ -54,12 +54,10 @@ const AddExpenseDetails = ({ navigation }) => {
   };
 
   const options = [
-    { label: 'Food', value: 'Food' },
-    { label: 'Bills', value: 'Bills' },
-    { label: 'Groceries', value: 'Groceries' },
-    { label: 'Transport', value: 'Transport' },
-    { label: 'Shopping', value: 'Shopping' },
-    { label: 'Social', value: 'Social' },
+    { label: 'Salary', value: 'Salary' },
+    { label: 'Allowance', value: 'Allowance' },
+    { label: 'Bonus', value: 'Bonus' },
+    { label: 'Petty Cash', value: 'Petty Cash' },
     { label: 'Others', value: 'Others' },
   ];
 
@@ -69,7 +67,7 @@ const AddExpenseDetails = ({ navigation }) => {
 
     // Check if input value is empty or matches the pattern
     if (inputValue === '' || pattern.test(inputValue)) {
-      setAmountSpent(inputValue);
+      setAmountSaved(inputValue);
     }
   };
 
@@ -87,27 +85,27 @@ const AddExpenseDetails = ({ navigation }) => {
         value={category}
       />
 
-      <Text style={styles.label}>Expense Name:</Text>
+      <Text style={styles.label}>Income Name:</Text>
       <TextInput
         style={styles.input}
-        onChangeText={setExpenseName}
-        value={expenseName}
-        placeholder="Enter expense name"
+        onChangeText={setIncomeName}
+        value={incomeName}
+        placeholder="Enter Income name"
         placeholderTextColor="gray"
       />
 
-      <Text style={styles.label}>Amount Spent:</Text>
+      <Text style={styles.label}>Amount Saved:</Text>
       <TextInput
         style={styles.input}
         onChangeText={handleAmountChange}
-        value={amountSpent}
-        placeholder="Enter amount spent"
+        value={amountSaved}
+        placeholder="Enter Income"
         keyboardType="numeric"
         placeholderTextColor="gray"
       />
 
       <View style={styles.buttonContainer}>
-        <Button title="Save Expense" onPress={saveExpense} />
+        <Button title="Save Income" onPress={saveIncome} />
       </View>
     </View>
   );
@@ -149,7 +147,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'rgb(150,150,150)',
     borderWidth: 1,
     paddingHorizontal: 8,
     marginBottom: 16,
@@ -159,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddExpenseDetails;
+export default AddIncomeDetails;

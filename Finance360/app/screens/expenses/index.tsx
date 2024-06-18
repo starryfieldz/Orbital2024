@@ -2,9 +2,9 @@ import Title from "../expenses/components/title";
 import { View, ScrollView, StyleSheet } from 'react-native';
 import Month from "../expenses/components/month";
 import Chart from "../expenses/components/chart";
+import TotalSummary from "../expenses/components/totalSummary";
 import NavigationTab from "../../../components/navigation/navigation";
 import React, { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import AddingExpenseButton from "./components/addExpenseButton";
 import ExpenseLog from "../expenses/components/expenseLog";
 import { getId } from "../../../components/commoncodes/commoncodes";
@@ -40,6 +40,7 @@ const Expenses = ({ navigation, route }) => {
           earlierMonth={handleEarlierMonth}
           nextMonth={handleNextMonth}
         />
+        <TotalSummary userId={userId} currentMonth={currentMonth}/>
         <Chart userId={userId} currentMonth={currentMonth} />
         <ExpenseLog userId={userId} currentMonth={currentMonth} />
 
