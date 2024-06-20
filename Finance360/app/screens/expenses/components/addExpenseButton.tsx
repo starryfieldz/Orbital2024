@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const AddingExpenseButton = ({ navigation }) => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -37,7 +38,7 @@ const AddingExpenseButton = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={toggleMenu}>
-        <Text style={styles.text}> + </Text>
+        <Icon name="plus-circle" size={65} color="black"/>
       </TouchableOpacity>
 
       {menuVisible && (
@@ -80,12 +81,11 @@ const styles = StyleSheet.create({
   },
   container: {
     position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: 'black',
-    paddingVertical: 0,
-    paddingHorizontal: 2,
-    borderRadius: 20,
+    bottom: 5,
+    right: -10,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 40,
     alignSelf: 'center',
   },
   menu: {
@@ -113,13 +113,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   optionText: {
-    color: 'black',
+    color: 'white',
     fontSize: 18,
+    fontWeight: "bold",
   },
   cancelButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: 'white',
     borderRadius: 5,
     alignItems: 'center',
   },

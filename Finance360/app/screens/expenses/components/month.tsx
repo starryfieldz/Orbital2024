@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { format, subMonths, addMonths } from 'date-fns';
 
-const Month = ( {currentMonth, earlierMonth, nextMonth}) => {
+const Month = ( {currentMonth, earlierMonth, nextMonth} ) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.sideButton} onPress={earlierMonth}>

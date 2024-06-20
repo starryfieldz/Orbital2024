@@ -15,7 +15,7 @@ function calculateTotalPerDay(expensesOrIncomes) {
 
 const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.dateSection}>
                 <Text style={styles.dateText}>{format(date, "MMM dd")}</Text>
                 <View style={styles.totalsContainer}>
@@ -48,7 +48,7 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
                     <View key={category} style={styles.categorySection}> 
                         {Object.keys(incomes[category]).map(id => (
                             <View key={id} style={styles.cellContainer}>
-                                <Text style={styles.cellText}> {category} </Text>
+                                <Text style={styles.cellText}>{category}</Text>
                                 <Text style={styles.cellText}>{incomes[category][id].name} </Text>
                                 <Text style={styles.cellTextGreen}>${incomes[category][id].amount.toFixed(2)}</Text>
                             </View>
@@ -56,7 +56,7 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
                     </View>
                 ))
             )}
-        </View>
+        </ScrollView>
     );
 };
 
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
     container: {
         padding: 20,
         borderColor: "black",
-        borderWidth: 3,
-        margin: 5,
+        borderWidth: 0,
+        margin: 1,
     },
     dateSection: {
         marginVertical: 10,
@@ -96,37 +96,37 @@ const styles = StyleSheet.create({
     cellText: {
         flex: 1,
         textAlign: 'center',
-        fontSize: 15,
+        fontSize: 16,
     },
     cellTextRed: {
         flex: 1,
         textAlign: 'center',
         color: "red",
-        fontSize: 15,
+        fontSize: 16,
         fontWeight: "bold",
     },
     cellTextGreen: {
         flex: 1,
         textAlign: 'center',
         color: "green",
-        fontSize: 15,
+        fontSize: 16,
         fontWeight: "bold",
     },
     categorySection: {
         paddingVertical: 0,
     },
-    categoryText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'red',
-    },
+    // categoryText: {
+    //     fontSize: 16,
+    //     fontWeight: 'bold',
+    //     color: 'red',
+    // },
     cellContainer: {
-        paddingLeft: 10,
         flexDirection: "row",
         flex: 1,
         borderColor: "grey",
         borderBottomWidth: 1,
         justifyContent: "space-between",
+        paddingVertical: 5,
     },
 });
 
