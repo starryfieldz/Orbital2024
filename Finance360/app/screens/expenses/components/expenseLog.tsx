@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import ExpenseLogByDay from './expenseLogByDay';
-import { format, subMonths, addMonths } from 'date-fns';
+import { format } from 'date-fns';
 
 const FilterExpensesForMonth = ({data, currentMonth}) => {
     const expensesForMonth = {};
@@ -58,7 +58,7 @@ const ExpenseLog = ({ userId, currentMonth }) => {
                 <Text style = {styles.message}>No expenses/incomes yet!</Text>
             ) : (
                 allDates.map((date) => (
-                    <ExpenseLogByDay date = {date} expenses = {expenses[date]} incomes = {incomes[date]} />
+                    <ExpenseLogByDay key={date} date = {date} expenses = {expenses[date]} incomes = {incomes[date]} />
                 ))
             )}
         </ScrollView>

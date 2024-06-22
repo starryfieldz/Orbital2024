@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { format } from 'date-fns';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 function calculateTotalPerMonth({data, currentMonth}) {
     let total = 0.0;
@@ -32,10 +32,37 @@ const IncomeByMonth = ({ userId, currentMonth }) => {
     }, [userId, currentMonth]);
 
     return (
-        <View>
-            <Text>Monthly Income: {totalIncomePerMonth}</Text>
+        <View style={styles.container}>
+            <Text style={styles.label}>Monthly Income</Text>
+            <Text style={styles.amount}>${totalIncomePerMonth.toFixed(2)}</Text>
         </View>
     )
 };
- 
+
+const styles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+        marginVertical: 20,
+        padding: 10,
+        backgroundColor: '#f8f8f8',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        elevation: 5,
+    },
+    label: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 5,
+    },
+    amount: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#4CAF50',
+    },
+});
+
 export default IncomeByMonth;
