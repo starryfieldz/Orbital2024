@@ -6,7 +6,7 @@ const InsightsScreen = () => {
   return (
     <View style={styles.container}>
       <Text>Insights Screen</Text>
-    </View>
+    </View> 
   );
 };
 
