@@ -55,12 +55,16 @@ const TotalSummary = ({ userId, currentMonth }) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingBottom: 20,
-        paddingTop: 10,
-        flex: 1,
-        borderWidth: 5,
-        borderColor: "rgb(100, 100, 100)",
-        backgroundColor: "yellow",
+        alignItems: 'center',
+        marginVertical: 20,
+        padding: 10,
+        backgroundColor: '#f8f8f8',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        elevation: 5,
     },
     title: {
         fontSize: 18,

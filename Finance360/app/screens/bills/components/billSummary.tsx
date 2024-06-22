@@ -3,30 +3,65 @@ import Month from "../../expenses/components/month";
 import React, { useEffect, useState } from 'react';
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { format } from "date-fns";
+import { getDatabase, ref, onValue } from 'firebase/database';
 
-function totalBill( {userId, currentMonth} ) {
-    return 0;
+
+const filterBillsForMonth = ({bills, currentMonth}) => {
+    return bills ? Object.keys(bills)
+        .filter((billId) => bills[billId].dueDate.startsWith(format(currentMonth, 'yyyy-MM')))
+        .map((billId) => ({ id: billId, ...bills[billId] }))
+        : [];
+};
+
+function totalBill(bills) {
+    let output = 0;
+    bills.forEach(bill => {
+        output += bill.amount;
+    });
+    return output;
 }
+
 const BillSummary = ( {userId, currentMonth} ) => {
+
+    const [bills, setBills] = useState({});
+
+    useEffect(() => {
+        const db = getDatabase();
+        const billsRef = ref(db, `users/${userId}/bills`);
+        
+        onValue(billsRef, (snapshot) => {
+            const data = snapshot.val();
+            // const filteredBills = FilterBillsForMonth({data, currentMonth});
+            const filteredBills = data;
+            setBills(filteredBills);
+        });
+    }, [userId, currentMonth]);
+
+    const filteredBillsForMonth = filterBillsForMonth({bills, currentMonth});
+    const totalBillForMonth = totalBill(filteredBillsForMonth);
     return (
         <View style={styles.container}>
             <View style={styles.title}>
                 <Icon name="credit-card" size={30}/>
-                <Text style={styles.titleText}> {format(currentMonth, "MMMMMM yyyy").toUpperCase()}</Text>
+                <Text style={styles.titleText}> {format(currentMonth, "MMMMMM yyyy")}</Text>
             </View>
-            <Text style={styles.text}> Total Bills: ${totalBill({userId, currentMonth})}</Text>
+            <Text style={styles.text}> Total Bills: ${totalBillForMonth}</Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#fff8dc",
-        margin: 15,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 30,
-        
+        alignItems: 'center',
+        marginVertical: 20,
+        padding: 10,
+        backgroundColor: '#f8f8f8',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        elevation: 5,
     },
     title: {
         flexDirection: "row",

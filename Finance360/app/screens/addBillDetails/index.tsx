@@ -5,14 +5,12 @@ import CustomDatePicker from './datetimepicker';
 import { ref, set, push } from 'firebase/database';
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { DATABASE } from '../../firebaseConfig';
-import { addDays, addWeeks, addMonths, addYears } from 'date-fns';
 
 const AddBillDetails = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [recurrence, setRecurrence] = useState('');
-  const [settled, setSettled] = useState(false);
   const userId = getId();
 
   const saveBill = async () => {
@@ -26,50 +24,101 @@ const AddBillDetails = ({ navigation }) => {
       return;
     }
 
-    const dueDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+    let dueDate = date.toISOString().split('T')[0]; // Initialize dueDate for one-time bills
+
     const userBillsRef = ref(DATABASE, `users/${userId}/bills`);
 
     try {
-      const billData = {
-        name,
-        amount: parseFloat(amount),
-        dueDate,
-        recurrence,
-        settled,
-      };
-
-      if (recurrence === 'one-time') {
-        const newBillRef = push(userBillsRef);
-        await set(newBillRef, billData);
-      } else {
-        // Save recurring bills for the next year (customize this as needed)
-        let currentDate = new Date(date);
-        for (let i = 0; i < 12; i++) {
-          const newBillRef = push(userBillsRef);
-          await set(newBillRef, {
-            ...billData,
-            dueDate: currentDate.toISOString().split('T')[0],
-          });
-          if (recurrence === 'daily') {
-            currentDate = addDays(currentDate, 1);
-          } else if (recurrence === 'weekly') {
-            currentDate = addWeeks(currentDate, 1);
-          } else if (recurrence === 'monthly') {
-            currentDate = addMonths(currentDate, 1);
-          } else if (recurrence === 'yearly') {
-            currentDate = addYears(currentDate, 1);
-          }
-        }
+      // Handle different recurrence types
+      switch (recurrence) {
+        case 'one-time':
+          // Save one-time bill
+          await saveOneTimeBill(userBillsRef, dueDate);
+          break;
+        case 'daily':
+          // Save daily bills for the next 6 days
+          await saveRecurringBills(userBillsRef, 1, 6, 'day');
+          break;
+        case 'weekly':
+          // Save weekly bills for the next 6 weeks
+          await saveRecurringBills(userBillsRef, 7, 6, 'day');
+          break;
+        case 'monthly':
+          // Save monthly bills for the next 6 months
+          await saveRecurringBills(userBillsRef, 1, 6, 'month');
+          break;
+        case 'yearly':
+          // Save yearly bills for the next 6 years
+          await saveRecurringBills(userBillsRef, 1, 6, 'year');
+          break;
+        default:
+          console.error('Invalid recurrence type');
+          break;
       }
 
-      console.log("Bill saved successfully");
+      // Navigate back to the Bills screen with the month and year parameters
       const month = date.getMonth();
       const year = date.getFullYear();
-
-      // Navigate back to the Bills screen with the month and year parameters
       navigation.navigate('Bills', { month, year });
     } catch (error) {
       console.error("Error saving bill: ", error);
+    }
+  };
+
+  const saveOneTimeBill = async (userBillsRef, dueDate) => {
+    // Generate a unique key for the bill
+    const newBillRef = push(userBillsRef);
+
+    // Set the bill details for one-time bill
+    await set(newBillRef, {
+      name,
+      amount: parseFloat(amount),
+      dueDate,
+      recurrence,
+      settled: false,
+    });
+
+    console.log("One-time bill saved successfully");
+  };
+
+  const saveRecurringBills = async (userBillsRef, interval, repetitions, unit) => {
+    const startDate = new Date(date); // Start date for recurring bills
+
+    for (let i = 0; i < repetitions; i++) {
+      // Calculate the new due date based on recurrence type
+      switch (unit) {
+        case 'day':
+          startDate.setDate(startDate.getDate() + interval);
+          break;
+        case 'week':
+          startDate.setDate(startDate.getDate() + interval * 7);
+          break;
+        case 'month':
+          startDate.setMonth(startDate.getMonth() + interval);
+          break;
+        case 'year':
+          startDate.setFullYear(startDate.getFullYear() + interval);
+          break;
+        default:
+          console.error('Invalid recurrence unit');
+          break;
+      }
+
+      const newDueDate = startDate.toISOString().split('T')[0]; // New due date for each iteration
+
+      // Generate a unique key for the bill
+      const newBillRef = push(userBillsRef);
+
+      // Set the bill details for each iteration
+      await set(newBillRef, {
+        name,
+        amount: parseFloat(amount),
+        dueDate: newDueDate,
+        recurrence,
+        settled: false, // All bills are assumed not settled initially
+      });
+
+      console.log(`Bill for ${newDueDate} saved successfully`);
     }
   };
 
@@ -82,7 +131,10 @@ const AddBillDetails = ({ navigation }) => {
   ];
 
   const handleAmountChange = (inputValue) => {
+    // Regex pattern to match positive numbers with up to 2 decimal places
     const pattern = /^\d+(\.\d{0,2})?$/;
+
+    // Check if input value is empty or matches the pattern
     if (inputValue === '' || pattern.test(inputValue)) {
       setAmount(inputValue);
     }
@@ -112,25 +164,13 @@ const AddBillDetails = ({ navigation }) => {
         placeholderTextColor="gray"
       />
 
-      <Text style={styles.label}>Recurrence:</Text>
+      <Text style={styles.label}>Recurrence (only up to 6 times):</Text>
       <RNPickerSelect
         placeholder={{ label: 'Select Recurrence...', value: null }}
         items={recurrenceOptions}
         onValueChange={(value) => setRecurrence(value)}
         style={pickerSelectStyles}
         value={recurrence}
-      />
-
-      <Text style={styles.label}>Settled:</Text>
-      <RNPickerSelect
-        placeholder={{ label: 'Is the bill settled?', value: null }}
-        items={[
-          { label: 'Yes', value: true },
-          { label: 'No', value: false }
-        ]}
-        onValueChange={(value) => setSettled(value)}
-        style={pickerSelectStyles}
-        value={settled}
       />
 
       <View style={styles.buttonContainer}>
