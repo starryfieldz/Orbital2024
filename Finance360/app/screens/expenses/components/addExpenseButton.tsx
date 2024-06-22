@@ -61,12 +61,7 @@ const AddingExpenseButton = ({ navigation }) => {
           >
             <Text style={styles.optionText}>I</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={toggleMenu}
-          >
-            <Text style={styles.cancelText}>X</Text>
-          </TouchableOpacity>
+          
         </Animated.View>
       )}
     </View>

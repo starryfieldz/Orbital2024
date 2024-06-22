@@ -115,7 +115,7 @@ const Chart = ({ userId, currentMonth }) => {
                     />
                     {selectedCategory && selectedValue !== null && (
                         <Text style={styles.selectedText}>
-                            {`Selected Category: ${selectedCategory}, Amount: $${selectedValue}`}
+                            {`${selectedCategory},$${selectedValue}`}
                         </Text>
                     )}
                 </>
