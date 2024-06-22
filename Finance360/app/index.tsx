@@ -11,6 +11,7 @@ import AddExpenseDetails from "./screens/addExpenseDetails";
 import AddIncomeDetails from './screens/addIncomeDetails';
 import EditExpenseDetails from './screens/editExpenseDetails';
 import EditIncomeDetails from './screens/editIncomeDetails';
+import AddBillDetails from './screens/addBillDetails';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -31,6 +32,7 @@ export default function Index() {
                 <Stack.Screen name="AddIncomeDetails" component={AddIncomeDetails} />
                 <Stack.Screen name="EditExpenseDetails" component={EditExpenseDetails} />
                 <Stack.Screen name="EditIncomeDetails" component={EditIncomeDetails} />
+                <Stack.Screen name="AddBillDetails" component={AddBillDetails} />
             </Stack.Navigator>
     );
 }

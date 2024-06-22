@@ -33,13 +33,13 @@ const Expenses = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Title userId={userId} />
-
+      <Month
+        currentMonth={currentMonth}
+        earlierMonth={handleEarlierMonth}
+        nextMonth={handleNextMonth}
+      />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <Month
-          currentMonth={currentMonth}
-          earlierMonth={handleEarlierMonth}
-          nextMonth={handleNextMonth}
-        />
+        
         <TotalSummary userId={userId} currentMonth={currentMonth}/>
         <Chart userId={userId} currentMonth={currentMonth} />
         <ExpenseLog userId={userId} currentMonth={currentMonth} />

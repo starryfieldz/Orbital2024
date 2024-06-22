@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { getDatabase, ref, get, onValue } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 
-const Title = ( {userId} ) => {
+const Title = ({userId}) => {
     const [email, setEmail] = useState("");
     /*New*/
     useEffect(() => {
@@ -36,10 +36,6 @@ const Title = ( {userId} ) => {
         </View>
     );
 }
-
-Title.propTypes = {
-    name: PropTypes.string.isRequired,
-};
 
 const styles = StyleSheet.create({
     text : {

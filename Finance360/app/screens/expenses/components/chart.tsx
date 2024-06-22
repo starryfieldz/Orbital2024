@@ -40,27 +40,29 @@ const Chart = ({ userId, currentMonth }) => {
             const data = snapshot.val();
             const filteredExpenses = FilterExpensesForMonth({ data, currentMonth });
             setExpenses(filteredExpenses);
+
+            // Get all categories from filtered expenses
             const categorySet = new Set();
             Object.keys(filteredExpenses).forEach((date) => {
                 Object.keys(filteredExpenses[date]).forEach((category) => {
                     categorySet.add(category);
                 });
             });
-            setCategories(Array.from(categorySet));
+            const newCategories = Array.from(categorySet);
+            setCategories(newCategories);
+
+            // Assign colors to new categories
+            const newCategoryColors = { ...categoryColors };
+            let colorIndex = Object.keys(newCategoryColors).length;
+            newCategories.forEach((category) => {
+                if (!newCategoryColors[category] && colorIndex < predefinedColors.length) {
+                    newCategoryColors[category] = predefinedColors[colorIndex];
+                    colorIndex++;
+                }
+            });
+            setCategoryColors(newCategoryColors);
         });
     }, [userId, currentMonth]);
-
-    useEffect(() => {
-        const newCategoryColors = { ...categoryColors };
-        let colorIndex = 0;
-        categories.forEach((category) => {
-            if (!newCategoryColors[category] && colorIndex < predefinedColors.length) {
-                newCategoryColors[category] = predefinedColors[colorIndex];
-                colorIndex++;
-            }
-        });
-        setCategoryColors(newCategoryColors);
-    }, [categories]);
 
     function TotalPerCategory(expenses, givenCategory) {
         let output = 0.0;
