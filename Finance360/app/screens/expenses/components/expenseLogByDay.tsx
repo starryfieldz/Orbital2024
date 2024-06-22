@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
+import Icon from "react-native-vector-icons/AntDesign";
 
 function calculateTotalPerDay(expensesOrIncomes) {
     let total = 0.0;
@@ -52,22 +53,24 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
                 Object.keys(expenses).map(category => (
                     <View key={category} style={styles.categorySection}>
                         {Object.keys(expenses[category]).map(id => (
-                            <TouchableOpacity
-                                key={id}
-                                style={styles.cellContainer}
-                                onPress={() =>
-                                    handleExpensePress(
-                                        id,
-                                        category,
-                                        expenses[category][id].name,
-                                        expenses[category][id].amount
-                                    )
-                                }
-                            >
+                            <View key={id} style={styles.cellContainer}>
+                                
                                 <Text style={styles.cellText}>{category}</Text>
                                 <Text style={styles.cellText}>{expenses[category][id].name}</Text>
                                 <Text style={styles.cellTextRed}>${expenses[category][id].amount.toFixed(2)}</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        handleExpensePress(
+                                            id,
+                                            category,
+                                            expenses[category][id].name,
+                                            expenses[category][id].amount
+                                        )
+                                    }
+                                >
+                                    <Icon name="edit" size={20} color={'gray'}/>
+                                </TouchableOpacity>
+                            </View>
                         ))}
                     </View>
                 ))
@@ -79,22 +82,24 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
                 Object.keys(incomes).map(category => (
                     <View key={category} style={styles.categorySection}>
                         {Object.keys(incomes[category]).map(id => (
-                            <TouchableOpacity
-                                key={id}
-                                style={styles.cellContainer}
-                                onPress={() =>
-                                    handleIncomePress(
-                                        id,
-                                        category,
-                                        incomes[category][id].name,
-                                        incomes[category][id].amount
-                                    )
-                                }
-                            >
+                            <View key={id} style={styles.cellContainer}>
+                                
                                 <Text style={styles.cellText}>{category}</Text>
                                 <Text style={styles.cellText}>{incomes[category][id].name}</Text>
                                 <Text style={styles.cellTextGreen}>${incomes[category][id].amount.toFixed(2)}</Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        handleIncomePress(
+                                            id,
+                                            category,
+                                            incomes[category][id].name,
+                                            incomes[category][id].amount
+                                        )
+                                    }
+                                >
+                                    <Icon name="edit" size={20} color={'gray'}/>
+                                </TouchableOpacity>
+                            </View>
                         ))}
                     </View>
                 ))
