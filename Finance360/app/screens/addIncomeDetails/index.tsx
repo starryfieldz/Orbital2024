@@ -2,139 +2,110 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import CustomDatePicker from './datetimepicker';
-import { ref, set, push } from 'firebase/database';
+import { ref, set, get, push } from 'firebase/database';
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { DATABASE } from '../../firebaseConfig';
-import { addDays, addWeeks, addMonths, addYears } from 'date-fns';
 
-const AddBillDetails = ({ navigation }) => {
+const AddIncomeDetails = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
-  const [name, setName] = useState('');
-  const [amount, setAmount] = useState('');
-  const [recurrence, setRecurrence] = useState('');
-  const [settled, setSettled] = useState(false);
+  const [category, setCategory] = useState('');
+  const [incomeName, setIncomeName] = useState('');
+  const [amountSaved, setAmountSaved] = useState('');
   const userId = getId();
 
-  const saveBill = async () => {
+  const saveIncome = async () => {
     if (!userId) {
       console.error('User not authenticated');
       return;
     }
 
-    if (!date || !name || !amount || !recurrence) {
-      Alert.alert('Error', 'Fill in all fields before saving bill.');
+    if (!date || !category || !incomeName || !amountSaved) {
+      Alert.alert('Error', 'Fill in all fields before saving income.');
       return;
     }
 
-    const dueDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-    const userBillsRef = ref(DATABASE, `users/${userId}/bills`);
+    const incomeDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+    const userIncomeRef = ref(DATABASE, `users/${userId}/income/${incomeDate}/${category}`);
 
     try {
-      const billData = {
-        name,
-        amount: parseFloat(amount),
-        dueDate,
-        recurrence,
-        settled,
-      };
+      // Generate a unique key for the expense
+      const newIncomeRef = push(userIncomeRef);
 
-      if (recurrence === 'one-time') {
-        const newBillRef = push(userBillsRef);
-        await set(newBillRef, billData);
-      } else {
-        // Save recurring bills for the next year (customize this as needed)
-        let currentDate = new Date(date);
-        for (let i = 0; i < 12; i++) {
-          const newBillRef = push(userBillsRef);
-          await set(newBillRef, {
-            ...billData,
-            dueDate: currentDate.toISOString().split('T')[0],
-          });
-          if (recurrence === 'daily') {
-            currentDate = addDays(currentDate, 1);
-          } else if (recurrence === 'weekly') {
-            currentDate = addWeeks(currentDate, 1);
-          } else if (recurrence === 'monthly') {
-            currentDate = addMonths(currentDate, 1);
-          } else if (recurrence === 'yearly') {
-            currentDate = addYears(currentDate, 1);
-          }
-        }
-      }
+      // Set the expense details under the specified category
+      await set(newIncomeRef, {
+        name: incomeName,
+        amount: parseFloat(amountSaved),
+      });
 
-      console.log("Bill saved successfully");
+      console.log("Expense saved successfully");
       const month = date.getMonth();
       const year = date.getFullYear();
 
-      // Navigate back to the Bills screen with the month and year parameters
-      navigation.navigate('Bills', { month, year });
+      // Navigate back to the Expenses screen with the month and year parameters
+      navigation.navigate('Expenses', { month, year });
     } catch (error) {
-      console.error("Error saving bill: ", error);
+      console.error("Error saving income: ", error);
     }
   };
 
-  const recurrenceOptions = [
-    { label: 'One-time', value: 'one-time' },
-    { label: 'Daily', value: 'daily' },
-    { label: 'Weekly', value: 'weekly' },
-    { label: 'Monthly', value: 'monthly' },
-    { label: 'Yearly', value: 'yearly' },
+  const placeholder = {
+    label: 'Select a Category...',
+    value: null,
+  };
+
+  const options = [
+    { label: 'Salary', value: 'Salary' },
+    { label: 'Allowance', value: 'Allowance' },
+    { label: 'Bonus', value: 'Bonus' },
+    { label: 'Petty Cash', value: 'Petty Cash' },
+    { label: 'Others', value: 'Others' },
   ];
 
   const handleAmountChange = (inputValue) => {
+    // Regex pattern to match positive numbers with up to 2 decimal places
     const pattern = /^\d+(\.\d{0,2})?$/;
+
+    // Check if input value is empty or matches the pattern
     if (inputValue === '' || pattern.test(inputValue)) {
-      setAmount(inputValue);
+      setAmountSaved(inputValue);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Due Date:</Text>
+      <Text style={styles.label}>Date:</Text>
       <CustomDatePicker date={date} setDate={setDate} />
 
-      <Text style={styles.label}>Name:</Text>
+      <Text style={styles.label}>Category:</Text>
+      <RNPickerSelect
+        placeholder={placeholder}
+        items={options}
+        onValueChange={(value) => setCategory(value)}
+        style={pickerSelectStyles}
+        value={category}
+      />
+
+      <Text style={styles.label}>Income Name:</Text>
       <TextInput
         style={styles.input}
-        onChangeText={setName}
-        value={name}
-        placeholder="Enter Bill Name"
+        onChangeText={setIncomeName}
+        value={incomeName}
+        placeholder="Enter Income name"
         placeholderTextColor="gray"
       />
 
-      <Text style={styles.label}>Amount:</Text>
+      <Text style={styles.label}>Amount Saved:</Text>
       <TextInput
         style={styles.input}
         onChangeText={handleAmountChange}
-        value={amount}
-        placeholder="Enter Amount"
+        value={amountSaved}
+        placeholder="Enter Income"
         keyboardType="numeric"
         placeholderTextColor="gray"
       />
 
-      <Text style={styles.label}>Recurrence:</Text>
-      <RNPickerSelect
-        placeholder={{ label: 'Select Recurrence...', value: null }}
-        items={recurrenceOptions}
-        onValueChange={(value) => setRecurrence(value)}
-        style={pickerSelectStyles}
-        value={recurrence}
-      />
-
-      <Text style={styles.label}>Settled:</Text>
-      <RNPickerSelect
-        placeholder={{ label: 'Is the bill settled?', value: null }}
-        items={[
-          { label: 'Yes', value: true },
-          { label: 'No', value: false }
-        ]}
-        onValueChange={(value) => setSettled(value)}
-        style={pickerSelectStyles}
-        value={settled}
-      />
-
       <View style={styles.buttonContainer}>
-        <Button title="Save Bill" onPress={saveBill} />
+        <Button title="Save Income" onPress={saveIncome} />
       </View>
     </View>
   );
@@ -165,6 +136,7 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -186,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddBillDetails;
+export default AddIncomeDetails;

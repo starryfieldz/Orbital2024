@@ -2,19 +2,31 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { VictoryPie, VictoryLabel, VictoryLegend } from 'victory-native';
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { format } from 'date-fns';
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 
-const FilterExpensesForMonth = ({ data, currentMonth }) => {
+const FilterExpensesForMonth = ({ data, currentDate }) => {
     const expensesForMonth = {};
     for (let date in data) {
-        if (date.startsWith(format(currentMonth, "yyyy-MM"))) {
+        if (date.startsWith(format(currentDate, "yyyy-MM"))) {
             expensesForMonth[date] = data[date];
         }
     }
     return expensesForMonth;
 };
 
-const Chart = ({ userId, currentMonth }) => {
+const FilterExpensesForWeek = ({ data, currentDate }) => {
+    const expensesForWeek = {};
+    const start = startOfWeek(currentDate);
+    const end = endOfWeek(currentDate);
+    for (let date in data) {
+        if (isWithinInterval(date, { start, end })) {
+            expensesForWeek[date] = data[date];
+        }
+    }
+    return expensesForWeek;
+};
+
+const Chart = ({ userId, currentDate, viewMode}) => {
     const screenWidth = Dimensions.get('window').width;
     const [expenses, setExpenses] = useState({});
     const [categories, setCategories] = useState([]);
@@ -23,7 +35,7 @@ const Chart = ({ userId, currentMonth }) => {
     const [selectedValue, setSelectedValue] = useState(null);
     const predefinedColors = [
         'rgb(255, 0, 0)',       // Red
-        'rgb(255, 140, 0)',      // Orange Red
+        'rgb(255, 140, 0)',     // Orange Red
         'rgb(255, 215, 0)',     // Gold
         'rgb(0, 128, 0)',       // Green
         'rgb(0, 0, 255)',       // Blue
@@ -54,6 +66,7 @@ const Chart = ({ userId, currentMonth }) => {
 
         onValue(expensesRef, (snapshot) => {
             const data = snapshot.val();
+
             const filteredExpenses = FilterExpensesForMonth({ data, currentMonth });
             setExpenses(filteredExpenses);
 
@@ -78,7 +91,7 @@ const Chart = ({ userId, currentMonth }) => {
             });
             setCategoryColors(newCategoryColors);
         });
-    }, [userId, currentMonth]);
+    }, [userId, currentDate]);
 
     function TotalPerCategory(expenses, givenCategory) {
         let output = 0.0;

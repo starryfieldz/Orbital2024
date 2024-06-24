@@ -41,8 +41,8 @@ const AddExpenseDetails = ({ navigation }) => {
       const month = date.getMonth();
       const year = date.getFullYear();
 
-      // Navigate back to the Expenses screen with the month and year parameters
-      navigation.navigate('Expenses', { month, year });
+      // Navigate back to the Expenses screen with mode and date parameters
+      navigation.navigate('Expenses', { date: expenseDate });
     } catch (error) {
       console.error("Error saving expense: ", error);
     }
