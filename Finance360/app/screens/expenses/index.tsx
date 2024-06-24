@@ -1,7 +1,8 @@
 import Title from "../expenses/components/title";
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import Month from "../expenses/components/month";
+import Month from "./components/month";
+import Week from "../expenses/components/week"; // Assuming you have a Week component
 import Chart from "../expenses/components/chart";
 import TotalSummary from "../expenses/components/totalSummary";
 import NavigationTab from "../../../components/navigation/navigation";
@@ -9,41 +10,74 @@ import React, { useEffect, useState } from 'react';
 import AddingExpenseButton from "./components/addExpenseButton";
 import ExpenseLog from "../expenses/components/expenseLog";
 import { getId } from "../../../components/commoncodes/commoncodes";
-import { format, subMonths, addMonths, setMonth, setYear } from 'date-fns';
+import { format, subWeeks, subMonths, addMonths, addWeeks, setWeek, setYear } from 'date-fns'; // Use date-fns functions for weeks
 
 const Expenses = ({ navigation, route }) => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [viewMode, setViewMode] = useState('month'); // 'month' or 'week'
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
-    if (route.params?.month !== undefined && route.params?.year !== undefined) {
-      const { month, year } = route.params;
-      const newDate = setMonth(setYear(new Date(), year), month);
-      setCurrentMonth(newDate);
+    if (route.params?.date !== undefined) {
+    const { date } = route.params;
+    setViewMode("month");
+    setCurrentDate(new Date(date));
     }
   }, [route.params]);
 
-  const handleEarlierMonth = () => {
-    setCurrentMonth(subMonths(currentMonth, 1));
+  const handleEarlierPeriod = () => {
+    if (viewMode === 'month') {
+    setCurrentDate(subMonths(currentDate, 1));
+    } else if (viewMode === 'week') {
+    setCurrentDate(subWeeks(currentDate, 1));
+    }
   };
 
-  const handleNextMonth = () => {
-    setCurrentMonth(addMonths(currentMonth, 1));
+  const handleNextPeriod = () => {
+    if (viewMode === 'month') {
+      setCurrentDate(addMonths(currentDate, 1));
+    } else if (viewMode === 'week') {
+      setCurrentDate(addWeeks(currentDate, 1));
+    }
+  };
+
+  const toggleViewMode = () => {
+    if (viewMode === 'month') {
+      setViewMode('week');
+      // Reset currentDate to the current week's start date
+      setCurrentDate(new Date());
+    } else {
+      setViewMode('month');
+      setCurrentDate(new Date());
+    } 
   };
 
   const userId = getId();
+
   return (
     <View style={styles.container}>
       <Title userId={userId} />
-      <Month
-        currentMonth={currentMonth}
-        earlierMonth={handleEarlierMonth}
-        nextMonth={handleNextMonth}
-      />
+      <TouchableOpacity style={styles.toggleButton} onPress={toggleViewMode}>
+        <Text style={styles.toggleButtonText}>{viewMode === 'month' ? 'Show Week' : 'Show Month'}</Text>
+      </TouchableOpacity>
+      {viewMode === 'month' ? (
+        <View>
+          <Month
+            currentMonth={currentDate}
+            earlierMonth={handleEarlierPeriod}
+            nextMonth={handleNextPeriod}
+          />
+        </View>
+      ) : (
+        <Week
+          currentDate={currentDate}
+          earlierPeriod={handleEarlierPeriod}
+          nextPeriod={handleNextPeriod}
+        />
+      )}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        
-        <TotalSummary userId={userId} currentMonth={currentMonth}/>
-        <Chart userId={userId} currentMonth={currentMonth} />
-        <ExpenseLog userId={userId} currentMonth={currentMonth} />
+        <TotalSummary userId={userId} currentDate={currentDate} viewMode={viewMode}/>
+        {/* <Chart userId={userId} currentDate={currentDate} viewMode={viewMode}/>
+        <ExpenseLog userId={userId} currentMonth={currentDate} viewMode={viewMode}/> */}
       </ScrollView>
       <View style={styles.addExpenseButton}>
         <AddingExpenseButton navigation={navigation} />
@@ -52,8 +86,8 @@ const Expenses = ({ navigation, route }) => {
         <NavigationTab navigation={navigation} />
       </View>
     </View>
-  );
-};
+    );
+  };
 
 const styles = StyleSheet.create({
   container: {
@@ -74,6 +108,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 80,
     right: 30,
+  },
+  toggleButton: {
+    alignSelf: 'flex-end',
+    padding: 10,
+    marginRight: 10,
+  },
+  toggleButtonText: {
+    color: 'blue',
+    fontWeight: 'bold',
   },
 });
 

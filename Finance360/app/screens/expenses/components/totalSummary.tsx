@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import ExpenseLogByDay from './expenseLogByDay';
-import { format, subMonths, addMonths } from 'date-fns';
+import { format, subMonths, addMonths, startOfWeek, endOfWeek, isWithinInterval, startOfMonth, endOfMonth, parseISO } from 'date-fns';
 
-function calculateTotalPerMonth({data, currentMonth}) {
+function calculateTotalPerMonth({data, currentDate}) {
     let total = 0.0;
     for (let date in data) {
-        if (date.startsWith(format(currentMonth, "yyyy-MM"))) {
+        if (date.startsWith(format(currentDate, "yyyy-MM"))) {
             Object.values(data[date]).forEach(category => {
                 Object.values(category).forEach(item => {
                     total += item.amount;
@@ -18,9 +18,25 @@ function calculateTotalPerMonth({data, currentMonth}) {
     return total;
 };
 
-const TotalSummary = ({ userId, currentMonth }) => {
-    const [totalExpensesPerMonth, setTotalExpensesPerMonth] = useState(0.0);
-    const [totalIncomePerMonth, setTotalIncomePerMonth] = useState(0.0);
+function calculateTotalPerWeek({data, currentDate}) {
+    let total = 0.0;
+    const start = startOfWeek(currentDate);
+    const end = endOfWeek(currentDate);
+    for (let date in data) {
+        if (isWithinInterval(parseISO(date), { start, end } )) {
+            Object.values(data[date]).forEach(category => {
+                Object.values(category).forEach(item => {
+                    total += item.amount;
+                });
+            });
+        }
+    }
+    return total;
+};
+
+const TotalSummary = ({ userId, currentDate, viewMode }) => {
+    const [totalExpensesPerPeriod, setTotalExpensesPerPeriod] = useState(0.0);
+    const [totalIncomePerPeriod, setTotalIncomePerPeriod] = useState(0.0);
 
     useEffect(() => {
         const db = getDatabase();
@@ -28,11 +44,15 @@ const TotalSummary = ({ userId, currentMonth }) => {
         
         onValue(expensesRef, (snapshot) => {
             const data = snapshot.val();
-            const newTotalExpensesPerMonth = calculateTotalPerMonth({data, currentMonth});
-            setTotalExpensesPerMonth(newTotalExpensesPerMonth);
-            
+            if ( viewMode === "month" ) {
+                const newTotalExpensesPerPeriod = calculateTotalPerMonth({data, currentDate});
+                setTotalExpensesPerPeriod(newTotalExpensesPerPeriod);
+            } else {
+                const newTotalExpensesPerPeriod = calculateTotalPerWeek({data, currentDate});
+                setTotalExpensesPerPeriod(newTotalExpensesPerPeriod);
+            }
         });
-    }, [userId, currentMonth]);
+    }, [userId, currentDate]);
 
     useEffect(() => {
         const db = getDatabase();
@@ -40,15 +60,15 @@ const TotalSummary = ({ userId, currentMonth }) => {
         
         onValue(incomesRef, (snapshot) => {
             const data = snapshot.val();
-            const newTotalExpensesPerMonth = calculateTotalPerMonth({data, currentMonth});
-            setTotalIncomePerMonth(newTotalExpensesPerMonth);
+            const newTotalExpensesPerPeriod = calculateTotalPerMonth({data, currentDate});
+            setTotalIncomePerPeriod(newTotalExpensesPerPeriod);
         });
-    }, [userId, currentMonth]);
+    }, [userId, currentDate]);
 
     return (
         <View style={styles.container}>
-            <Text style={styles.redText}>Total Expenditure: ${totalExpensesPerMonth.toFixed(2)}</Text>
-            <Text style={styles.greenText}>Total Income: ${totalIncomePerMonth.toFixed(2)}</Text>
+            <Text style={styles.redText}>Total Expenditure: ${totalExpensesPerPeriod.toFixed(2)}</Text>
+            <Text style={styles.greenText}>Total Income: ${totalIncomePerPeriod.toFixed(2)}</Text>
         </View>
     );
 };
