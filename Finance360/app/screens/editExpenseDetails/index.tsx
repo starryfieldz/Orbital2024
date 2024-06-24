@@ -83,7 +83,7 @@ const EditExpenseDetails = ({ route, navigation }) => {
       const year = date.getFullYear();
 
       // Navigate back to the Expenses screen with the month and year parameters
-      navigation.navigate('Expenses', { month, year });
+      navigation.navigate('Expenses', { date: formattedDate });
     } catch (error) {
       console.error("Error deleting expense: ", error);
     }

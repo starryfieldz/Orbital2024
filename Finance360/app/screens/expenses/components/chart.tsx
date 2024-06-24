@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { VictoryPie, VictoryLabel, VictoryLegend } from 'victory-native';
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
@@ -19,14 +19,26 @@ const FilterExpensesForWeek = ({ data, currentDate }) => {
     const start = startOfWeek(currentDate);
     const end = endOfWeek(currentDate);
     for (let date in data) {
-        if (isWithinInterval(date, { start, end })) {
+        if (isWithinInterval(new Date(date), { start, end })) {
             expensesForWeek[date] = data[date];
         }
     }
     return expensesForWeek;
 };
 
-const Chart = ({ userId, currentDate, viewMode}) => {
+function TotalPerCategory(expenses, givenCategory) {
+    let output = 0.0;
+    Object.keys(expenses).forEach((date) => {
+        if (expenses[date][givenCategory]) {
+            Object.keys(expenses[date][givenCategory]).forEach((id) => {
+                output += expenses[date][givenCategory][id].amount;
+            });
+        }
+    });
+    return output;
+};
+
+const Chart = ({ userId, currentDate, viewMode }) => {
     const screenWidth = Dimensions.get('window').width;
     const [expenses, setExpenses] = useState({});
     const [categories, setCategories] = useState([]);
@@ -59,17 +71,23 @@ const Chart = ({ userId, currentDate, viewMode}) => {
     
     
     
-
     useEffect(() => {
         const db = getDatabase();
         const expensesRef = ref(db, `users/${userId}/expenses`);
-
+    
         onValue(expensesRef, (snapshot) => {
             const data = snapshot.val();
-
-            const filteredExpenses = FilterExpensesForMonth({ data, currentMonth });
+            let filteredExpenses = {};
+    
+            if (viewMode === "month") {
+                filteredExpenses = FilterExpensesForMonth({ data, currentDate });
+            } else {
+                filteredExpenses = FilterExpensesForWeek({ data, currentDate });
+            }
+    
+            // Update state after filtering expenses
             setExpenses(filteredExpenses);
-
+    
             // Get all categories from filtered expenses
             const categorySet = new Set();
             Object.keys(filteredExpenses).forEach((date) => {
@@ -79,7 +97,7 @@ const Chart = ({ userId, currentDate, viewMode}) => {
             });
             const newCategories = Array.from(categorySet);
             setCategories(newCategories);
-
+    
             // Assign colors to new categories
             const newCategoryColors = { ...categoryColors };
             let colorIndex = Object.keys(newCategoryColors).length;
@@ -91,19 +109,8 @@ const Chart = ({ userId, currentDate, viewMode}) => {
             });
             setCategoryColors(newCategoryColors);
         });
-    }, [userId, currentDate]);
-
-    function TotalPerCategory(expenses, givenCategory) {
-        let output = 0.0;
-        Object.keys(expenses).forEach((date) => {
-            if (expenses[date][givenCategory]) {
-                Object.keys(expenses[date][givenCategory]).forEach((id) => {
-                    output += expenses[date][givenCategory][id].amount;
-                });
-            }
-        });
-        return output;
-    }
+    }, [userId, currentDate, viewMode]);
+    
 
     const data = categories.map((category) => ({
         x: category,
@@ -113,47 +120,71 @@ const Chart = ({ userId, currentDate, viewMode}) => {
     const sortedData = data.sort((a, b) => b.y - a.y)
 
     return (
-        <View style={styles.container}>
-            {/* <Text style={styles.headerText}> See your spending overview for{'\n'}{format(currentMonth, "MMM yyyy")} </Text> */}
-            {data.length === 0 || data.every(item => item.y === 0) ? (
-                <Text style={styles.message}>No spending yet!</Text>
-            ) : (
-                <View style={{padding: 0}}>
-                    <VictoryPie
-                        data={data}
-                        colorScale={categories.map(category => categoryColors[category])}
-                        width={screenWidth}
-                        height={400}
-                        innerRadius={0}
-                        radius={({datum}) => (selectedCategory && selectedCategory == datum.x) ? 180 : 170}
-                        labels={({ datum }) =>  (selectedCategory && selectedCategory == datum.x) ? `${datum.x}: \n ${datum.y}` : null}
-                        style={{
-                            labels: {
-                                fill: 'black',
-                                textShadow:3,
-                                fontSize: 18,
-                                textAlign: "centre",
-                                textJustify:"centre",
-                            },
-                            data: {
-                                fillOpacity: ({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 0.5 : 1,
-                            },
-                        }}
-                        labelRadius={110}
-                        labelPosition={'centroid'}
-                        events={[{
-                            target: "data",
-                            eventHandlers: {
-                                onPress: (evt, clickedProps) => {
-                                    const { datum } = clickedProps;
-                                    setSelectedCategory(datum.x);
-                                    setSelectedValue(datum.y);
-                                }
+        <ScrollView horizontal={true}>
+            <View style = {{width: screenWidth}}>
+                {sortedData.length === 0 || sortedData.every(item => item.y === 0) ? (
+                    <Text style={styles.message}>No spending yet!</Text>
+                ) : (
+                    <View style={{ padding: 0 }}>
+                        <VictoryPie
+                            data={sortedData}
+                            colorScale={categories.map(category => categoryColors[category])}
+                            width={screenWidth}
+                            height={400}
+                            innerRadius={0}
+                            
+                            radius={({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 180 : 150}
+                            // labels={({ datum }) => (selectedCategory && selectedCategory == datum.x) ? `${datum.x}: \n ${datum.y}` : null}
+                            style={{
+                                data: {
+                                    fillOpacity: ({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 0.5 : 1,
+                                    strokeWidth: ({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 5 : 0,
+                                    stroke: "white",
+                                },
+                            }}
+                            labelPosition={'centroid'}
+                            labelComponent={
+                                <CustomLabel
+                                    selectedCategory={selectedCategory}
+                                    selectedValue={selectedValue}
+                                    categories={categories}
+                                    categoryColors={categoryColors}
+                                />
                             }
-                        }]}
-                    />
-                </View>
-            )}
+                            labelRadius={110}
+                            events={[{
+                                target: "data",
+                                eventHandlers: {
+                                    onPress: (evt, clickedProps) => {
+                                        const { datum } = clickedProps;
+                                        setSelectedCategory(datum.x);
+                                        setSelectedValue(datum.y);
+                                    }
+                                }
+                            }]}
+                        />
+                    </View>
+                )}
+            </View>
+            <View style={{width: screenWidth}}>
+                <Text> ______________ Line Chart / Bar Chart _________________</Text>
+            </View>
+        </ScrollView>
+    );
+    
+};
+
+const CustomLabel = ({ x, y, datum, selectedCategory, selectedValue, categories, categoryColors }) => {
+    const isSelected = selectedCategory && selectedCategory === datum.x;
+    const backgroundColor = isSelected ? "black" : 'transparent';
+    const textColor = isSelected ? 'white' : 'black';
+    const padding = 8;
+
+    return (
+        <View style={[styles.labelContainer, { backgroundColor, padding }]}>
+            <Text style={[styles.labelText, { color: textColor }]}>
+                {isSelected ? `${datum.x}: \n $${datum.y}` : null}
+            </Text>
         </View>
     );
 };
@@ -173,12 +204,15 @@ const styles = StyleSheet.create({
         fontSize: 15,
         textAlign: "center",
     },
-    selectedText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginTop: 10,
-        color: 'black',
-    }
+    labelContainer: {
+        borderRadius: 5,
+        alignSelf: 'center',
+    },
+    labelText: {
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: "bold",
+    },
 });
 
 export default Chart;

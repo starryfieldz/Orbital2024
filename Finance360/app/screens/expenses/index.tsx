@@ -18,17 +18,17 @@ const Expenses = ({ navigation, route }) => {
 
   useEffect(() => {
     if (route.params?.date !== undefined) {
-    const { date } = route.params;
-    setViewMode("month");
-    setCurrentDate(new Date(date));
+      const { date } = route.params;
+      setViewMode("month");
+      setCurrentDate(new Date(date));
     }
   }, [route.params]);
 
   const handleEarlierPeriod = () => {
     if (viewMode === 'month') {
-    setCurrentDate(subMonths(currentDate, 1));
+      setCurrentDate(subMonths(currentDate, 1));
     } else if (viewMode === 'week') {
-    setCurrentDate(subWeeks(currentDate, 1));
+      setCurrentDate(subWeeks(currentDate, 1));
     }
   };
 
@@ -57,7 +57,7 @@ const Expenses = ({ navigation, route }) => {
     <View style={styles.container}>
       <Title userId={userId} />
       <TouchableOpacity style={styles.toggleButton} onPress={toggleViewMode}>
-        <Text style={styles.toggleButtonText}>{viewMode === 'month' ? 'Show Week' : 'Show Month'}</Text>
+        <Text style={styles.toggleButtonText}>{viewMode === 'month' ? 'Weekly View' : 'Monthly View'}</Text>
       </TouchableOpacity>
       {viewMode === 'month' ? (
         <View>
@@ -76,8 +76,8 @@ const Expenses = ({ navigation, route }) => {
       )}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <TotalSummary userId={userId} currentDate={currentDate} viewMode={viewMode}/>
-        {/* <Chart userId={userId} currentDate={currentDate} viewMode={viewMode}/>
-        <ExpenseLog userId={userId} currentMonth={currentDate} viewMode={viewMode}/> */}
+        <Chart userId={userId} currentDate={currentDate} viewMode={viewMode}/>
+        <ExpenseLog userId={userId} currentDate={currentDate} viewMode={viewMode}/>
       </ScrollView>
       <View style={styles.addExpenseButton}>
         <AddingExpenseButton navigation={navigation} />
@@ -115,8 +115,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   toggleButtonText: {
-    color: 'blue',
+    color: 'black',
     fontWeight: 'bold',
+    fontSize:20,
   },
 });
 
