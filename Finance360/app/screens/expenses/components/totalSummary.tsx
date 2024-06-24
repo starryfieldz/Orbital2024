@@ -74,12 +74,14 @@ const styles = StyleSheet.create({
     },
 
     redText: {
-        fontSize: 15,
-        color: "red",    
+        fontSize: 24,
+        color: "red",   
+        fontWeight: "bold", 
     },
     greenText: {
-        fontSize: 15,
-        color: "green",    
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#4CAF50',
     },
 });
 

@@ -3,8 +3,6 @@ import { View, StyleSheet, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlanScreen from './components/planScreen';
 import RemainingScreen from './components/remainingScreen';
-import InsightsScreen from './components/insightsScreen';
-import IncomeByMonth from './components/incomeByMonth';
 import Month from '../expenses/components/month';
 import { subMonths, addMonths } from 'date-fns';
 import { getId } from '../../../components/commoncodes/commoncodes';
@@ -28,14 +26,18 @@ const Budgeting = ({ navigation }) => {
   const [routes] = useState([
     { key: 'plan', title: 'Plan' },
     { key: 'remaining', title: 'Remaining' },
-    { key: 'insights', title: 'Insights' },
   ]);
 
-  const renderScene = SceneMap({
-    plan: PlanScreen,
-    remaining: RemainingScreen,
-    insights: InsightsScreen,
-  });
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'plan':
+        return <PlanScreen />;
+      case 'remaining':
+        return <RemainingScreen currentMonth={currentMonth} />;
+      default:
+        return null;
+    }
+  };
 
   const renderTabBar = props => (
     <TabBar
@@ -53,7 +55,6 @@ const Budgeting = ({ navigation }) => {
         earlierMonth={handleEarlierMonth}
         nextMonth={handleNextMonth}
       />
-      <IncomeByMonth userId={userId} currentMonth={currentMonth} />
 
       <TabView
         navigationState={{ index, routes }}
@@ -62,8 +63,8 @@ const Budgeting = ({ navigation }) => {
         initialLayout={initialLayout}
         renderTabBar={renderTabBar}
       />
-      <View style = {styles.navigationTab}>
-          <NavigationTab navigation = {navigation} />
+      <View style={styles.navigationTab}>
+        <NavigationTab navigation={navigation} />
       </View>
     </View>
   );
@@ -74,14 +75,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-
   navigationTab: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
   },
-  
 });
 
 export default Budgeting;
