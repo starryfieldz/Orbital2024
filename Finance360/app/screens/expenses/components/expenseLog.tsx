@@ -2,29 +2,53 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import ExpenseLogByDay from './expenseLogByDay';
-import { format } from 'date-fns';
+import { format, startOfMonth, endOfMonth, endOfWeek, startOfWeek, isWithinInterval } from 'date-fns';
 
-const FilterExpensesForMonth = ({data, currentMonth}) => {
+const FilterExpensesForMonth = ({data, currentDate}) => {
     const expensesForMonth = {};
     for (let date in data) {
-        if (date.startsWith(format(currentMonth, "yyyy-MM"))) {
+        if (date.startsWith(format(currentDate, "yyyy-MM"))) {
             expensesForMonth[date] = data[date];
         }
     }
     return expensesForMonth;
 };
 
-const FilterIncomesForMonth= ({data, currentMonth}) => {
+const FilterExpensesForWeek = ({ data, currentDate }) => {
+    const expensesForWeek = {};
+    const start = startOfWeek(currentDate);
+    const end = endOfWeek(currentDate);
+    for (let date in data) {
+        if (isWithinInterval(new Date(date), { start, end })) {
+            expensesForWeek[date] = data[date];
+        }
+    }
+    return expensesForWeek;
+};
+
+const FilterIncomesForMonth= ({data, currentDate}) => {
     const incomesForMonth = {};
     for (let date in data) {
-        if (date.startsWith(format(currentMonth, "yyyy-MM"))) {
+        if (date.startsWith(format(currentDate, "yyyy-MM"))) {
             incomesForMonth[date] = data[date];
         }
     }
     return incomesForMonth;
 };
 
-const ExpenseLog = ({ userId, currentMonth }) => {
+const FilterIncomesForWeek = ({ data, currentDate }) => {
+    const expensesForWeek = {};
+    const start = startOfWeek(currentDate);
+    const end = endOfWeek(currentDate);
+    for (let date in data) {
+        if (isWithinInterval(new Date(date), { start, end })) {
+            expensesForWeek[date] = data[date];
+        }
+    }
+    return expensesForWeek;
+};
+
+const ExpenseLog = ({ userId, currentDate, viewMode }) => {
     const [expenses, setExpenses] = useState({});
     const [incomes, setIncomes] = useState({});
 
@@ -34,10 +58,15 @@ const ExpenseLog = ({ userId, currentMonth }) => {
         
         onValue(expensesRef, (snapshot) => {
             const data = snapshot.val();
-            const filteredExpenses = FilterExpensesForMonth({data, currentMonth});
+            let filteredExpenses = {};
+            if (viewMode === "month") {
+                filteredExpenses = FilterExpensesForMonth({data, currentDate});
+            } else {
+                filteredExpenses = FilterExpensesForWeek({data, currentDate});
+            }
             setExpenses(filteredExpenses);
         });
-    }, [userId, currentMonth]);
+    }, [userId, currentDate, viewMode]);
 
     useEffect(() => {
         const db = getDatabase();
@@ -45,15 +74,21 @@ const ExpenseLog = ({ userId, currentMonth }) => {
         
         onValue(incomesRef, (snapshot) => {
             const data = snapshot.val();
-            const filteredIncomes = FilterIncomesForMonth({data, currentMonth});
+            let filteredIncomes = {};
+            if (viewMode === "month") {
+                filteredIncomes = FilterIncomesForMonth({data, currentDate});
+                
+            } else {
+                filteredIncomes = FilterIncomesForWeek({data, currentDate});
+            }
             setIncomes(filteredIncomes);
         });
-    }, [userId, currentMonth]);
+    }, [userId, currentDate, viewMode]);
 
     const allDates = Array.from(new Set([...Object.keys(expenses), ...Object.keys(incomes)])).sort();
     return (
         <ScrollView style={styles.container}>
-            <Text style = {styles.headerText}> See all records for {format(currentMonth, "MMM yyyy")}</Text>
+            <Text style = {styles.headerText}> See all records for {format(currentDate, "MMM yyyy")}</Text>
             {allDates.length == 0 ? (
                 <Text style = {styles.message}>No expenses/incomes yet!</Text>
             ) : (

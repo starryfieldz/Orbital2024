@@ -23,7 +23,7 @@ function calculateTotalPerWeek({data, currentDate}) {
     const start = startOfWeek(currentDate);
     const end = endOfWeek(currentDate);
     for (let date in data) {
-        if (isWithinInterval(parseISO(date), { start, end } )) {
+        if (isWithinInterval(new Date(date), { start, end } )) {
             Object.values(data[date]).forEach(category => {
                 Object.values(category).forEach(item => {
                     total += item.amount;
@@ -36,7 +36,7 @@ function calculateTotalPerWeek({data, currentDate}) {
 
 const TotalSummary = ({ userId, currentDate, viewMode }) => {
     const [totalExpensesPerPeriod, setTotalExpensesPerPeriod] = useState(0.0);
-    const [totalIncomePerPeriod, setTotalIncomePerPeriod] = useState(0.0);
+    const [totalIncomePerPeriod, setTotalIncomesPerPeriod] = useState(0.0);
 
     useEffect(() => {
         const db = getDatabase();
@@ -44,15 +44,18 @@ const TotalSummary = ({ userId, currentDate, viewMode }) => {
         
         onValue(expensesRef, (snapshot) => {
             const data = snapshot.val();
+            let newTotalExpensesPerPeriod = 0.0;
+
             if ( viewMode === "month" ) {
-                const newTotalExpensesPerPeriod = calculateTotalPerMonth({data, currentDate});
-                setTotalExpensesPerPeriod(newTotalExpensesPerPeriod);
+                newTotalExpensesPerPeriod = calculateTotalPerMonth({data, currentDate});
+                
             } else {
-                const newTotalExpensesPerPeriod = calculateTotalPerWeek({data, currentDate});
-                setTotalExpensesPerPeriod(newTotalExpensesPerPeriod);
+                newTotalExpensesPerPeriod = calculateTotalPerWeek({data, currentDate});
             }
+
+            setTotalExpensesPerPeriod(newTotalExpensesPerPeriod);
         });
-    }, [userId, currentDate]);
+    }, [userId, currentDate, viewMode]);
 
     useEffect(() => {
         const db = getDatabase();
@@ -60,10 +63,18 @@ const TotalSummary = ({ userId, currentDate, viewMode }) => {
         
         onValue(incomesRef, (snapshot) => {
             const data = snapshot.val();
-            const newTotalExpensesPerPeriod = calculateTotalPerMonth({data, currentDate});
-            setTotalIncomePerPeriod(newTotalExpensesPerPeriod);
+            let newTotalIncomesPerPeriod = 0.0;
+
+            if ( viewMode === "month" ) {
+                newTotalIncomesPerPeriod = calculateTotalPerMonth({data, currentDate});
+                
+            } else {
+                newTotalIncomesPerPeriod = calculateTotalPerWeek({data, currentDate});
+            }
+
+            setTotalIncomesPerPeriod(newTotalIncomesPerPeriod);
         });
-    }, [userId, currentDate]);
+    }, [userId, currentDate, viewMode]);
 
     return (
         <View style={styles.container}>

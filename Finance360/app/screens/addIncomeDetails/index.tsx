@@ -42,7 +42,7 @@ const AddIncomeDetails = ({ navigation }) => {
       const year = date.getFullYear();
 
       // Navigate back to the Expenses screen with the month and year parameters
-      navigation.navigate('Expenses', { month, year });
+      navigation.navigate('Expenses', { date: incomeDate });
     } catch (error) {
       console.error("Error saving income: ", error);
     }
