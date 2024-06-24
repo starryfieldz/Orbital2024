@@ -42,10 +42,9 @@ const BillSummary = ( {userId, currentMonth} ) => {
     return (
         <View style={styles.container}>
             <View style={styles.title}>
-                <Icon name="credit-card" size={25}/>
-                <Text style={styles.titleText}> {format(currentMonth, "MMMMMM yyyy")}</Text>
+                <Text style={styles.titleText}> Total Bills </Text>
             </View>
-            <Text style={styles.text}> Total Bills: ${totalBillForMonth}</Text>
+            <Text style={styles.text}>${totalBillForMonth}</Text>
         </View>
     );
 }

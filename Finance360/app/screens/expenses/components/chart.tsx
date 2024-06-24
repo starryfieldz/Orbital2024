@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { VictoryPie } from 'victory-native';
+import { VictoryPie, VictoryLabel, VictoryLegend } from 'victory-native';
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { format } from 'date-fns';
@@ -11,7 +11,6 @@ const FilterExpensesForMonth = ({ data, currentMonth }) => {
             expensesForMonth[date] = data[date];
         }
     }
-    console.log(expensesForMonth);
     return expensesForMonth;
 };
 
@@ -23,14 +22,31 @@ const Chart = ({ userId, currentMonth }) => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedValue, setSelectedValue] = useState(null);
     const predefinedColors = [
-        'rgb(191, 33, 30)', 'rgb(233, 206, 44)', 'rgb(229, 249, 147)',
-        'rgb(105, 161, 151)', 'rgb(52, 73, 94)', 'rgb(155, 89, 182)',
-        'rgb(52, 152, 219)', 'rgb(46, 204, 113)', 'rgb(241, 196, 15)',
-        'rgb(231, 76, 60)', 'rgb(230, 126, 34)', 'rgb(231, 76, 60)',
-        'rgb(149, 165, 166)', 'rgb(243, 156, 18)', 'rgb(127, 140, 141)',
-        'rgb(39, 174, 96)', 'rgb(41, 128, 185)', 'rgb(142, 68, 173)',
-        'rgb(44, 62, 80)', 'rgb(26, 188, 156)'
+        'rgb(255, 0, 0)',       // Red
+        'rgb(255, 140, 0)',      // Orange Red
+        'rgb(255, 215, 0)',     // Gold
+        'rgb(0, 128, 0)',       // Green
+        'rgb(0, 0, 255)',       // Blue
+        'rgb(75, 0, 130)',      // Indigo
+        'rgb(238, 130, 238)',   // Violet
+        'rgb(178, 34, 34)',     // Firebrick (Red)
+        'rgb(255, 140, 0)',     // Dark Orange
+        'rgb(218, 165, 32)',    // Golden Rod
+        'rgb(34, 139, 34)',     // Forest Green
+        'rgb(30, 144, 255)',    // Dodger Blue
+        'rgb(106, 90, 205)',    // Slate Blue
+        'rgb(153, 50, 204)',    // Dark Orchid (Violet)
+        'rgb(220, 20, 60)',     // Crimson (Red)
+        'rgb(255, 165, 0)',     // Orange
+        'rgb(154, 205, 50)',    // Yellow Green
+        'rgb(0, 255, 0)',       // Lime (Green)
+        'rgb(0, 191, 255)',     // Deep Sky Blue
+        'rgb(148, 0, 211)',     // Dark Violet (Indigo)
+        'rgb(255, 0, 255)'      // Magenta (Violet)
     ];
+    
+    
+    
 
     useEffect(() => {
         const db = getDatabase();
@@ -85,25 +101,33 @@ const Chart = ({ userId, currentMonth }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.headerText}> See your spending overview for {format(currentMonth, "MMM yyyy")} </Text>
+            {/* <Text style={styles.headerText}> See your spending overview for{'\n'}{format(currentMonth, "MMM yyyy")} </Text> */}
             {data.length === 0 || data.every(item => item.y === 0) ? (
                 <Text style={styles.message}>No spending yet!</Text>
             ) : (
-                <>
+                <View style={{padding: 0}}>
                     <VictoryPie
                         data={data}
                         colorScale={categories.map(category => categoryColors[category])}
-                        width={screenWidth - 10}
-                        height={310}
-                        innerRadius={20}
-                        labels={({ datum }) => `${datum.x}`}
+                        width={screenWidth}
+                        height={400}
+                        innerRadius={0}
+                        radius={({datum}) => (selectedCategory && selectedCategory == datum.x) ? 180 : 170}
+                        labels={({ datum }) =>  (selectedCategory && selectedCategory == datum.x) ? `${datum.x}: \n ${datum.y}` : null}
                         style={{
                             labels: {
                                 fill: 'black',
-                                fontSize: 12,
-                                fontWeight: 'bold',
+                                textShadow:3,
+                                fontSize: 18,
+                                textAlign: "centre",
+                                textJustify:"centre",
+                            },
+                            data: {
+                                fillOpacity: ({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 0.5 : 1,
                             },
                         }}
+                        labelRadius={110}
+                        labelPosition={'centroid'}
                         events={[{
                             target: "data",
                             eventHandlers: {
@@ -115,12 +139,7 @@ const Chart = ({ userId, currentMonth }) => {
                             }
                         }]}
                     />
-                    {selectedCategory && selectedValue !== null && (
-                        <Text style={styles.selectedText}>
-                            {`${selectedCategory},$${selectedValue}`}
-                        </Text>
-                    )}
-                </>
+                </View>
             )}
         </View>
     );
@@ -132,7 +151,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         textAlign: "center",
         paddingBottom: 10,
@@ -145,8 +164,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 10,
-        color: 'blue',
+        color: 'black',
     }
 });
 
 export default Chart;
+
+

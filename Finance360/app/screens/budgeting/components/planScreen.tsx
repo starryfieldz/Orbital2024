@@ -105,9 +105,9 @@ const PlanScreen = () => {
           <View key={category} style={styles.categoryContainer}>
             <View style={styles.categoryHeader}>
               <Text style={styles.categoryTitle}>{category}</Text>
-              <TouchableOpacity onPress={() => openAddModal(category)}>
+              {/* <TouchableOpacity onPress={() => openAddModal(category)}>
                 <Ionicons name="add-circle-outline" size={24} color="black" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             {Object.keys(budgets[category]).length === 1 && budgets[category].placeholder ? (
               <Text>{budgets[category].placeholder}</Text>
@@ -150,7 +150,7 @@ const PlanScreen = () => {
               onChangeText={setCurrentAmount}
             />
             <Button title="Save" onPress={saveAmount} />
-            <Button title="Delete" onPress={deleteSubCategory} />
+            {/* <Button title="Delete" onPress={deleteSubCategory} /> */}
             <Button title="Cancel" onPress={() => setModalVisible(false)} />
           </View>
         </View>

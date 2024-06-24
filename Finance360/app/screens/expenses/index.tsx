@@ -1,5 +1,6 @@
 import Title from "../expenses/components/title";
 import { View, ScrollView, StyleSheet } from 'react-native';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Month from "../expenses/components/month";
 import Chart from "../expenses/components/chart";
 import TotalSummary from "../expenses/components/totalSummary";

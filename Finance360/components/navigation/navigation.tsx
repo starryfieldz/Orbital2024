@@ -8,7 +8,7 @@ const NavigationTab = ({ navigation }) => {
     const tabs = [
         { name: "Expenses", icon: "dollar-sign", path: "Expenses" },
         { name: "Budgeting", icon: "calendar-days", path: "Budgeting" },
-        { name: "Bills", icon: "money-bill", path: "Bills" },
+        { name: "Bills", icon: "credit-card", path: "Bills" },
         { name: "Portfolio", icon: "briefcase", path: "Portfolio" },
         { name: "Stock", icon: "arrow-trend-up", path: "Stock" },
     ];
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     link: {
         flex: 1,
         alignItems: 'center',
+        width: 80,
     },
     tab: {
         alignItems: 'center',
