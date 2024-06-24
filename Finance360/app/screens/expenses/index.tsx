@@ -43,12 +43,6 @@ const Expenses = ({ navigation, route }) => {
         <TotalSummary userId={userId} currentMonth={currentMonth}/>
         <Chart userId={userId} currentMonth={currentMonth} />
         <ExpenseLog userId={userId} currentMonth={currentMonth} />
-
-        <Month
-          currentMonth={currentMonth}
-          earlierMonth={handleEarlierMonth}
-          nextMonth={handleNextMonth}
-        />
       </ScrollView>
       <View style={styles.addExpenseButton}>
         <AddingExpenseButton navigation={navigation} />
@@ -63,6 +57,7 @@ const Expenses = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   scrollViewContent: {
     flexGrow: 1,

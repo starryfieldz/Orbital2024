@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { differenceInDays, format } from 'date-fns';
-import { getDatabase, ref, onValue, update } from 'firebase/database';
+import { getDatabase, ref, onValue, update, push, set } from 'firebase/database';
 import MyCheckBox from '../../../../components/MyCheckBox/MyCheckBox';
+import ConfirmAddToExpense from './confirmAddToExpense'; // Adjust the import path as per your project structure
 
-const filterBillsForMonth = ({ bills, currentMonth }) => {
+const filterBillsForMonth = ({ bills, currentMonth, settled }) => {
   return bills
     ? Object.keys(bills)
-        .filter((billId) => bills[billId].dueDate.startsWith(format(currentMonth, 'yyyy-MM')))
-        .map((billId) => ({ id: billId, ...bills[billId] }))
+      .filter((billId) => bills[billId].settled === settled && bills[billId].dueDate.startsWith(format(currentMonth, 'yyyy-MM')))
+      .map((billId) => ({ id: billId, ...bills[billId] }))
     : [];
 };
 
@@ -17,9 +18,11 @@ const sortBills = (bills) => {
   return bills.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 };
 
-const BillsList = ({ userId, currentMonth }) => {
+const BillsList = ({ userId, currentMonth, settled }) => {
   const [bills, setBills] = useState({});
   const [selectedBills, setSelectedBills] = useState({});
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [selectedBillIds, setSelectedBillIds] = useState([]);
 
   useEffect(() => {
     const db = getDatabase();
@@ -32,14 +35,10 @@ const BillsList = ({ userId, currentMonth }) => {
   }, [userId, currentMonth]);
 
   const handleSelectBill = (billId, selected) => {
-    setSelectedBills((prevSelected) => {
-      const updatedSelected = {
-        ...prevSelected,
-        [billId]: selected,
-      };
-      console.log('Selected bills:', updatedSelected); // Log updated selected bills
-      return updatedSelected;
-    });
+    setSelectedBills((prevSelected) => ({
+      ...prevSelected,
+      [billId]: selected,
+    }));
   };
 
   const handleSettleBills = () => {
@@ -50,18 +49,58 @@ const BillsList = ({ userId, currentMonth }) => {
       return;
     }
 
+    setSelectedBillIds(selectedIds);
+    setShowConfirmationModal(true);
+  };
+
+  const handleConfirm = (addToExpense) => {
+    setShowConfirmationModal(false);
+
     const db = getDatabase();
-    selectedIds.forEach((billId) => {
+    const currentDate = new Date().toISOString().split('T')[0];
+    const expensesBillsRef = ref(db, `users/${userId}/expenses/${currentDate}/Bills`);
+
+    selectedBillIds.forEach((billId) => {
       const billRef = ref(db, `users/${userId}/bills/${billId}`);
-      update(billRef, { settled: true });
+      const bill = bills[billId];
+
+      if (addToExpense) {
+        update(billRef, { settled: true })
+          .then(() => {
+            const expenseData = {
+              amount: bill.amount,
+              name: bill.name,
+            };
+
+            const newExpenseRef = push(expensesBillsRef);
+            set(newExpenseRef, expenseData);
+          })
+          .catch((error) => {
+            console.error('Error updating/settling bill:', error);
+            Alert.alert('Error', 'There was an error settling the bill. Please try again.');
+          });
+      } else {
+        // If not adding to expense, just settle the bill locally
+        update(billRef, { settled: true })
+          .then(() => {
+            const updatedBills = { ...bills };
+            updatedBills[billId].settled = true;
+            setBills(updatedBills);
+          })
+          .catch((error) => {
+            console.error('Error updating/settling bill:', error);
+            Alert.alert('Error', 'There was an error settling the bill. Please try again.');
+          });
+      }
     });
 
-    const updatedBills = { ...bills };
-    selectedIds.forEach((id) => {
-      updatedBills[id].settled = true;
-    });
-    setBills(updatedBills);
+    setSelectedBillIds([]);
     setSelectedBills({});
+  };
+
+  const handleCancel = () => {
+    setShowConfirmationModal(false);
+    setSelectedBillIds([]);
   };
 
   const handleDeleteBills = () => {
@@ -96,6 +135,9 @@ const BillsList = ({ userId, currentMonth }) => {
   };
 
   const getColorByDaysUntilDue = (daysUntilDue) => {
+    if (settled) {
+      return 'green';
+    }
     if (daysUntilDue <= 0) {
       return 'crimson'; // overdue
     } else if (daysUntilDue <= 3) {
@@ -129,7 +171,8 @@ const BillsList = ({ userId, currentMonth }) => {
             <Text style={styles.billText}>{format(new Date(item.dueDate), 'dd MMM')}</Text>
           </View>
           <View style={[styles.cell, { alignItems: 'center' }]}>
-            {daysUntilDue <= 3 && <Icon name="circle-exclamation" color="white" size={25} />}
+            {settled && <Icon name="circle-check" color="white" size={25} />}
+            {!settled && daysUntilDue <= 3 && <Icon name="circle-exclamation" color="white" size={25} />}
           </View>
         </View>
       </View>
@@ -139,8 +182,8 @@ const BillsList = ({ userId, currentMonth }) => {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Icon name="table-list" size={30} />
-        <Text style={styles.titleText}> UPCOMING BILLS </Text>
+        <Icon name={settled ? "circle-check" : "table-list"} size={25} />
+        <Text style={styles.titleText}> {settled ? 'SETTLED BILLS' : 'UPCOMING BILLS'} </Text>
       </View>
 
       <View style={styles.header}>
@@ -163,18 +206,26 @@ const BillsList = ({ userId, currentMonth }) => {
         <Text style={styles.message}>No bills yet!</Text>
       ) : (
         <ScrollView>
-          {sortBills(filterBillsForMonth({ bills, currentMonth })).map((bill) => renderItem(bill))}
+          {sortBills(filterBillsForMonth({ bills, currentMonth, settled })).map((bill) => renderItem(bill))}
         </ScrollView>
       )}
 
       <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.settleButton} onPress={handleSettleBills}>
-          <Text style={styles.buttonText}>Settle</Text>
-        </TouchableOpacity>
+        {!settled && (
+          <TouchableOpacity style={styles.settleButton} onPress={handleSettleBills}>
+            <Text style={styles.buttonText}>Settle</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteBills}>
           <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
       </View>
+
+      <ConfirmAddToExpense
+        visible={showConfirmationModal}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
     </View>
   );
 };
@@ -190,7 +241,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   titleText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 10,
   },
@@ -237,7 +288,7 @@ const styles = StyleSheet.create({
   actionButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 20,
+    padding: 10,
   },
   settleButton: {
     backgroundColor: '#4CAF50',
