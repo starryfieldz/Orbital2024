@@ -42,7 +42,7 @@ const IncomeByMonth = ({ userId, currentMonth }) => {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        marginVertical: 20,
+        marginVertical: 10,
         padding: 10,
         backgroundColor: '#f8f8f8',
         borderRadius: 10,

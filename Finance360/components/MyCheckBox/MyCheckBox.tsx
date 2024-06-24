@@ -6,7 +6,7 @@ const MyCheckBox = ({ value, onValueChange }) => {
     return (
       <TouchableOpacity onPress={() => onValueChange(!value)}>
         <View style={styles.container}>
-          {value ? <Icon name="check-square" size={24} color="green" /> : <Icon name="square" size={24} color="black" />}
+          {value ? <Icon name="check-square" size={24} color="white" /> : <Icon name="square" size={24} color="black" />}
         </View>
       </TouchableOpacity>
     );

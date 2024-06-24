@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import CustomDatePicker from './datetimepicker';
 import { ref, set, push } from 'firebase/database';
@@ -12,6 +12,7 @@ const AddBillDetails = ({ navigation }) => {
   const [amount, setAmount] = useState('');
   const [recurrence, setRecurrence] = useState('');
   const userId = getId();
+  const [isLoading, setIsLoading] = useState(false);
 
   const saveBill = async () => {
     if (!userId) {
@@ -24,7 +25,7 @@ const AddBillDetails = ({ navigation }) => {
       return;
     }
 
-    let dueDate = date.toISOString().split('T')[0]; // Initialize dueDate for one-time bills
+    setIsLoading(true);
 
     const userBillsRef = ref(DATABASE, `users/${userId}/bills`);
 
@@ -33,23 +34,23 @@ const AddBillDetails = ({ navigation }) => {
       switch (recurrence) {
         case 'one-time':
           // Save one-time bill
-          await saveOneTimeBill(userBillsRef, dueDate);
+          await saveOneTimeBill(userBillsRef, date);
           break;
         case 'daily':
           // Save daily bills for the next 6 days
-          await saveRecurringBills(userBillsRef, 1, 6, 'day');
+          await saveRecurringBills(userBillsRef, date, 1, 6, 'day');
           break;
         case 'weekly':
           // Save weekly bills for the next 6 weeks
-          await saveRecurringBills(userBillsRef, 7, 6, 'day');
+          await saveRecurringBills(userBillsRef, date, 7, 6, 'day');
           break;
         case 'monthly':
           // Save monthly bills for the next 6 months
-          await saveRecurringBills(userBillsRef, 1, 6, 'month');
+          await saveRecurringBills(userBillsRef, date, 1, 6, 'month');
           break;
         case 'yearly':
           // Save yearly bills for the next 6 years
-          await saveRecurringBills(userBillsRef, 1, 6, 'year');
+          await saveRecurringBills(userBillsRef, date, 1, 6, 'year');
           break;
         default:
           console.error('Invalid recurrence type');
@@ -62,11 +63,15 @@ const AddBillDetails = ({ navigation }) => {
       navigation.navigate('Bills', { month, year });
     } catch (error) {
       console.error("Error saving bill: ", error);
+      Alert.alert('Error', 'Failed to save bill. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const saveOneTimeBill = async (userBillsRef, dueDate) => {
+  const saveOneTimeBill = async (userBillsRef, date) => {
     // Generate a unique key for the bill
+    const dueDate = date.toISOString().split('T')[0];
     const newBillRef = push(userBillsRef);
 
     // Set the bill details for one-time bill
@@ -81,30 +86,30 @@ const AddBillDetails = ({ navigation }) => {
     console.log("One-time bill saved successfully");
   };
 
-  const saveRecurringBills = async (userBillsRef, interval, repetitions, unit) => {
-    const startDate = new Date(date); // Start date for recurring bills
+  const saveRecurringBills = async (userBillsRef, startDate, interval, repetitions, unit) => {
 
     for (let i = 0; i < repetitions; i++) {
+      let newDueDate = new Date(startDate);
       // Calculate the new due date based on recurrence type
       switch (unit) {
         case 'day':
-          startDate.setDate(startDate.getDate() + interval);
+          newDueDate.setDate(startDate.getDate() + interval * i);
           break;
         case 'week':
-          startDate.setDate(startDate.getDate() + interval * 7);
+          newDueDate.setDate(startDate.getDate() + interval * 7 * i);
           break;
         case 'month':
-          startDate.setMonth(startDate.getMonth() + interval);
+          newDueDate.setMonth(startDate.getMonth() + interval * i);
           break;
         case 'year':
-          startDate.setFullYear(startDate.getFullYear() + interval);
+          newDueDate.setFullYear(startDate.getFullYear() + interval * i);
           break;
         default:
           console.error('Invalid recurrence unit');
           break;
       }
 
-      const newDueDate = startDate.toISOString().split('T')[0]; // New due date for each iteration
+      const formattedDueDate = newDueDate.toISOString().split('T')[0]; // New due date for each iteration
 
       // Generate a unique key for the bill
       const newBillRef = push(userBillsRef);
@@ -113,12 +118,12 @@ const AddBillDetails = ({ navigation }) => {
       await set(newBillRef, {
         name,
         amount: parseFloat(amount),
-        dueDate: newDueDate,
+        dueDate: formattedDueDate,
         recurrence,
         settled: false, // All bills are assumed not settled initially
       });
 
-      console.log(`Bill for ${newDueDate} saved successfully`);
+      console.log(`Bill for ${formattedDueDate} saved successfully`);
     }
   };
 
@@ -174,7 +179,11 @@ const AddBillDetails = ({ navigation }) => {
       />
 
       <View style={styles.buttonContainer}>
-        <Button title="Save Bill" onPress={saveBill} />
+        {isLoading ? (
+          <ActivityIndicator size="large" color="red" />
+        ) : (
+          <Button title="Save Bill" onPress={saveBill} />
+        )}
       </View>
     </View>
   );

@@ -42,7 +42,7 @@ const BillSummary = ( {userId, currentMonth} ) => {
     return (
         <View style={styles.container}>
             <View style={styles.title}>
-                <Icon name="credit-card" size={30}/>
+                <Icon name="credit-card" size={25}/>
                 <Text style={styles.titleText}> {format(currentMonth, "MMMMMM yyyy")}</Text>
             </View>
             <Text style={styles.text}> Total Bills: ${totalBillForMonth}</Text>
@@ -53,8 +53,8 @@ const BillSummary = ( {userId, currentMonth} ) => {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        marginVertical: 20,
-        padding: 2,
+        marginVertical: 10,
+        padding: 10,
         backgroundColor: '#f8f8f8',
         borderRadius: 10,
         shadowColor: '#000',
@@ -65,15 +65,18 @@ const styles = StyleSheet.create({
     },
     title: {
         flexDirection: "row",
-        paddingVertical: 10,
     },
     titleText : {
-        fontSize: 30,
-        fontWeight: "bold"
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 5,
     },
     text : {
-        fontSize: 30,
-    }
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#4CAF50',
+    },
 });
 
 export default BillSummary;
