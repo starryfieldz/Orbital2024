@@ -32,30 +32,68 @@ const BillsList = ({ userId, currentMonth }) => {
   }, [userId, currentMonth]);
 
   const handleSelectBill = (billId, selected) => {
-    setSelectedBills(prevSelected => {
+    setSelectedBills((prevSelected) => {
       const updatedSelected = {
         ...prevSelected,
         [billId]: selected,
       };
-      console.log("Selected bills:", updatedSelected); // Log updated selected bills
+      console.log('Selected bills:', updatedSelected); // Log updated selected bills
       return updatedSelected;
     });
   };
 
   const handleSettleBills = () => {
-    // Remove deselected bills from selectedBills state
-    const selectedIds = Object.keys(selectedBills).filter(id => selectedBills[id]);
-  
-    console.log('Settling bills:', selectedIds);
-    // Implement logic to settle bills in the database or perform other actions
+    const selectedIds = Object.keys(selectedBills).filter((id) => selectedBills[id]);
+
+    if (selectedIds.length === 0) {
+      Alert.alert('No bills selected', 'Please select a bill to settle.');
+      return;
+    }
+
+    const db = getDatabase();
+    selectedIds.forEach((billId) => {
+      const billRef = ref(db, `users/${userId}/bills/${billId}`);
+      update(billRef, { settled: true });
+    });
+
+    const updatedBills = { ...bills };
+    selectedIds.forEach((id) => {
+      updatedBills[id].settled = true;
+    });
+    setBills(updatedBills);
+    setSelectedBills({});
   };
-  
+
   const handleDeleteBills = () => {
-    // Remove deselected bills from selectedBills state
-    const selectedIds = Object.keys(selectedBills).filter(id => selectedBills[id]);
-  
-    console.log('Deleting bills:', selectedIds);
-  }
+    const selectedIds = Object.keys(selectedBills).filter((id) => selectedBills[id]);
+
+    if (selectedIds.length === 0) {
+      Alert.alert('No bills selected', 'Please select a bill to delete.');
+      return;
+    }
+
+    const db = getDatabase();
+    const updates = {};
+
+    selectedIds.forEach((id) => {
+      updates[`users/${userId}/bills/${id}`] = null; // setting to null will remove the entry in Firebase
+    });
+
+    update(ref(db), updates)
+      .then(() => {
+        const updatedBills = { ...bills };
+        selectedIds.forEach((id) => {
+          delete updatedBills[id];
+        });
+        setBills(updatedBills);
+        setSelectedBills({});
+        Alert.alert('Success', 'Selected bills have been deleted.');
+      })
+      .catch((error) => {
+        console.error('Error deleting bills:', error);
+        Alert.alert('Error', 'There was an error deleting the selected bills. Please try again.');
+      });
+  };
 
   const getColorByDaysUntilDue = (daysUntilDue) => {
     if (daysUntilDue <= 0) {

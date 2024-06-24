@@ -1,31 +1,40 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { format, subMonths, addMonths } from 'date-fns';
+import { format } from 'date-fns';
 
-const Month = ( {currentMonth, earlierMonth, nextMonth} ) => {
+const Month = ({ currentMonth, earlierMonth, nextMonth }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.sideButton} onPress={earlierMonth}>
-        <Text style={styles.sideButtonText}>{'<'}</Text>
-      </TouchableOpacity>
-      <Text style={styles.title}>{format(currentMonth, "MMM yyyy")}</Text>
-      <TouchableOpacity style={styles.sideButton} onPress={nextMonth}>
-        <Text style={styles.sideButtonText}>{'>'}</Text>
-      </TouchableOpacity>
+      <View style={styles.monthWrapper}>
+        <TouchableOpacity style={styles.sideButton} onPress={earlierMonth}>
+          <Text style={styles.sideButtonText}>{'<'}</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>{format(currentMonth, "MMM yyyy")}</Text>
+        <TouchableOpacity style={styles.sideButton} onPress={nextMonth}>
+          <Text style={styles.sideButtonText}>{'>'}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  monthWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    // padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   sideButton: {
-    paddingHorizontal: 50,
-    paddingVertical: 10
+    paddingHorizontal: 10,
   },
   sideButtonText: {
     fontSize: 24,
@@ -34,6 +43,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginHorizontal: 10,
   },
 });
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Button, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { getDatabase, ref, onValue, set } from 'firebase/database';
-import { getId } from '../../../../components/commoncodes/commoncodes'; // Adjust the import according to your file structure
+import { getDatabase, ref, onValue, set, remove } from 'firebase/database';
+import { getId } from '../../../../components/commoncodes/commoncodes'; 
 
 const PlanScreen = () => {
   const [budgets, setBudgets] = useState({});
@@ -12,6 +12,7 @@ const PlanScreen = () => {
   const [currentSubCategory, setCurrentSubCategory] = useState('');
   const [currentAmount, setCurrentAmount] = useState('');
   const [newSubCategory, setNewSubCategory] = useState('');
+  const [newSubCategoryAmount, setNewSubCategoryAmount] = useState('');
   const userId = getId();
 
   useEffect(() => {
@@ -42,6 +43,21 @@ const PlanScreen = () => {
     set(ref(db, newSubCategoryPath), amount);
   };
 
+  const handleDeleteSubCategory = (category, subCategory) => {
+    const db = getDatabase();
+    const subCategoryRef = ref(db, `users/${userId}/budget/${category}/${subCategory}`);
+    remove(subCategoryRef).then(() => {
+      // Check if the category has any subcategories left
+      const categoryRef = ref(db, `users/${userId}/budget/${category}`);
+      onValue(categoryRef, (snapshot) => {
+        if (!snapshot.exists()) {
+          // If no subcategories exist, set a placeholder value
+          set(ref(db, `users/${userId}/budget/${category}/placeholder`), 'Click on "+" to add a sub-category');
+        }
+      }, { onlyOnce: true });
+    });
+  };
+
   const openModal = (category, subCategory) => {
     setCurrentCategory(category);
     setCurrentSubCategory(subCategory);
@@ -51,6 +67,8 @@ const PlanScreen = () => {
 
   const openAddModal = (category) => {
     setCurrentCategory(category);
+    setNewSubCategory('');
+    setNewSubCategoryAmount('');
     setAddModalVisible(true);
   };
 
@@ -60,8 +78,22 @@ const PlanScreen = () => {
   };
 
   const saveNewSubCategory = () => {
-    handleAddSubCategory(currentCategory, newSubCategory, currentAmount);
-    setAddModalVisible(false);
+    if (!newSubCategory || !newSubCategoryAmount) {
+      Alert.alert('Error', 'All fields need to be filled in.');
+      return;
+    }
+
+    if (budgets[currentCategory] && budgets[currentCategory][newSubCategory]) {
+      Alert.alert('Error', 'Sub-category already exists.');
+    } else {
+      handleAddSubCategory(currentCategory, newSubCategory, newSubCategoryAmount);
+      setAddModalVisible(false);
+    }
+  };
+
+  const deleteSubCategory = () => {
+    handleDeleteSubCategory(currentCategory, currentSubCategory);
+    setModalVisible(false);
   };
 
   return (
@@ -77,17 +109,23 @@ const PlanScreen = () => {
                 <Ionicons name="add-circle-outline" size={24} color="black" />
               </TouchableOpacity>
             </View>
-            {Object.keys(budgets[category]).map((subCategory) => (
-              <TouchableOpacity
-                key={subCategory}
-                style={styles.subCategoryContainer}
-                onPress={() => openModal(category, subCategory)}
-              >
-                <Text style={styles.subCategoryText}>
-                  {subCategory}: ${budgets[category][subCategory]}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            {Object.keys(budgets[category]).length === 1 && budgets[category].placeholder ? (
+              <Text>{budgets[category].placeholder}</Text>
+            ) : (
+              Object.keys(budgets[category]).map((subCategory) => (
+                subCategory !== 'placeholder' && (
+                  <TouchableOpacity
+                    key={subCategory}
+                    style={styles.subCategoryContainer}
+                    onPress={() => openModal(category, subCategory)}
+                  >
+                    <Text style={styles.subCategoryText}>
+                      {subCategory}: ${budgets[category][subCategory]}
+                    </Text>
+                  </TouchableOpacity>
+                )
+              ))
+            )}
           </View>
         ))
       )}
@@ -104,6 +142,7 @@ const PlanScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Set Amount for {currentSubCategory}</Text>
+            
             <TextInput
               style={styles.input}
               keyboardType="numeric"
@@ -111,6 +150,7 @@ const PlanScreen = () => {
               onChangeText={setCurrentAmount}
             />
             <Button title="Save" onPress={saveAmount} />
+            <Button title="Delete" onPress={deleteSubCategory} />
             <Button title="Cancel" onPress={() => setModalVisible(false)} />
           </View>
         </View>
@@ -138,8 +178,8 @@ const PlanScreen = () => {
               style={styles.input}
               keyboardType="numeric"
               placeholder="Amount"
-              value={currentAmount}
-              onChangeText={setCurrentAmount}
+              value={newSubCategoryAmount}
+              onChangeText={setNewSubCategoryAmount}
             />
             <Button title="Save" onPress={saveNewSubCategory} />
             <Button title="Cancel" onPress={() => setAddModalVisible(false)} />

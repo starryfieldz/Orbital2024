@@ -1,14 +1,12 @@
-import { View, Text, ScrollView, StyleSheet } from "react-native";
-import Month from "../../expenses/components/month";
 import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { format } from "date-fns";
 import { getDatabase, ref, onValue } from 'firebase/database';
 
-
-const filterBillsForMonth = ({bills, currentMonth}) => {
+const filterSettledBillsForMonth = ({bills, currentMonth}) => {
     return bills ? Object.keys(bills)
-        .filter((billId) => bills[billId].dueDate.startsWith(format(currentMonth, 'yyyy-MM')))
+        .filter((billId) => bills[billId].settled && bills[billId].dueDate.startsWith(format(currentMonth, 'yyyy-MM')))
         .map((billId) => ({ id: billId, ...bills[billId] }))
         : [];
 };
@@ -21,7 +19,7 @@ function totalBill(bills) {
     return output;
 }
 
-const BillSummary = ( {userId, currentMonth} ) => {
+const SettledBillsSummary = ( {userId, currentMonth} ) => {
 
     const [bills, setBills] = useState({});
 
@@ -31,21 +29,21 @@ const BillSummary = ( {userId, currentMonth} ) => {
         
         onValue(billsRef, (snapshot) => {
             const data = snapshot.val();
-            // const filteredBills = FilterBillsForMonth({data, currentMonth});
             const filteredBills = data;
             setBills(filteredBills);
         });
     }, [userId, currentMonth]);
 
-    const filteredBillsForMonth = filterBillsForMonth({bills, currentMonth});
+    const filteredBillsForMonth = filterSettledBillsForMonth({bills, currentMonth});
     const totalBillForMonth = totalBill(filteredBillsForMonth);
+
     return (
         <View style={styles.container}>
             <View style={styles.title}>
-                <Icon name="credit-card" size={30}/>
-                <Text style={styles.titleText}> {format(currentMonth, "MMMMMM yyyy")}</Text>
+                <Icon name="check-circle" size={30}/>
+                <Text style={styles.titleText}> Settled {format(currentMonth, "MMMM yyyy")}</Text>
             </View>
-            <Text style={styles.text}> Total Bills: ${totalBillForMonth}</Text>
+            <Text style={styles.text}> Total Settled Bills: ${totalBillForMonth}</Text>
         </View>
     );
 }
@@ -54,7 +52,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         marginVertical: 20,
-        padding: 2,
+        padding: 10,
         backgroundColor: '#f8f8f8',
         borderRadius: 10,
         shadowColor: '#000',
@@ -68,12 +66,12 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     titleText : {
-        fontSize: 30,
+        fontSize: 20,
         fontWeight: "bold"
     },
     text : {
-        fontSize: 30,
+        fontSize: 20,
     }
 });
 
-export default BillSummary;
+export default SettledBillsSummary;
