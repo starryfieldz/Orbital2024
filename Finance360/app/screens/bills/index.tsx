@@ -1,18 +1,40 @@
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import NavigationTab from "../../../components/navigation/navigation";
-import Month from "../expenses/components/month";
-import { getId } from "@/components/commoncodes/commoncodes";
-import React, { useEffect, useState } from 'react';
-import { subMonths, addMonths, setMonth, setYear, format } from "date-fns";
-import Icon from "react-native-vector-icons/FontAwesome";
-import BillSummary from "./components/billSummary";
-import BillsList from "./components/billsList";
-import AddBillButton from "./components/addBillButton";
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { getId } from '@/components/commoncodes/commoncodes';
+import Month from '../expenses/components/month';
+import { subMonths, addMonths, setMonth, setYear, format } from 'date-fns';
+import BillSummary from './components/billSummary';
+import SettledBillsSummary from './components/settledBillsSummary';
+import BillsList from './components/billsList';
+import AddBillButton from './components/addBillButton';
+import NavigationTab from '../../../components/navigation/navigation';
 import { getDatabase, ref, update } from 'firebase/database';
+
+const initialLayout = { width: Dimensions.get('window').width };
+
+const UpcomingBills = ({ userId, currentMonth, onSettleBills, onDeleteBills }) => (
+    <View style={styles.tabContainer}>
+        <BillSummary userId={userId} currentMonth={currentMonth} />
+        <BillsList userId={userId} currentMonth={currentMonth} />
+    </View>
+);
+
+const SettledBills = ({ userId, currentMonth }) => (
+    <View style={styles.tabContainer}>
+        <SettledBillsSummary userId={userId} currentMonth={currentMonth} />
+    </View>
+);
 
 const Bills = ({ navigation, route }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [index, setIndex] = useState(0);
+    const [routes] = useState([
+        { key: 'upcoming', title: 'Upcoming Bills' },
+        { key: 'settled', title: 'Settled Bills' },
+    ]);
     const userId = getId();
+    const [selectedBills, setSelectedBills] = useState([]);
 
     useEffect(() => {
         if (route.params?.month !== undefined && route.params?.year !== undefined) {
@@ -30,15 +52,52 @@ const Bills = ({ navigation, route }) => {
         setCurrentMonth(addMonths(currentMonth, 1));
     };
 
-    const handleSettleBills = (selectedBills) => {
-        console.log("Settling bills:", selectedBills);
-        // Implement logic to settle bills in the database
+    const handleSettleBills = () => {
+        if (selectedBills.length === 0) {
+            alert('No bills have been selected. Please select a bill.');
+            return;
+        }
+        const db = getDatabase();
+        selectedBills.forEach(billId => {
+            const billRef = ref(db, `users/${userId}/bills/${billId}`);
+            update(billRef, { settled: true });
+        });
+        setSelectedBills([]);
     };
 
-    const handleDeleteBills = (selectedBills) => {
-        console.log("Deleting bills:", selectedBills);
-        // Implement logic to delete bills in the database
+    const handleDeleteBills = () => {
+        if (selectedBills.length === 0) {
+            alert('No bills have been selected. Please select a bill.');
+            return;
+        }
+        const db = getDatabase();
+        selectedBills.forEach(billId => {
+            const billRef = ref(db, `users/${userId}/bills/${billId}`);
+            billRef.remove();
+        });
+        setSelectedBills([]);
     };
+
+    const renderScene = SceneMap({
+        upcoming: () => (
+            <UpcomingBills
+                userId={userId}
+                currentMonth={currentMonth}
+                onSettleBills={handleSettleBills}
+                onDeleteBills={handleDeleteBills}
+            />
+        ),
+        settled: () => <SettledBills userId={userId} currentMonth={currentMonth} />,
+    });
+
+    const renderTabBar = props => (
+        <TabBar
+            {...props}
+            indicatorStyle={styles.indicator}
+            style={styles.tabBar}
+            labelStyle={styles.label}
+        />
+    );
 
     return (
         <View style={styles.container}>
@@ -47,11 +106,21 @@ const Bills = ({ navigation, route }) => {
                 earlierMonth={handleEarlierMonth}
                 nextMonth={handleNextMonth}
             />
-            
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>   
-                <BillSummary userId={userId} currentMonth={currentMonth} /> 
-                <BillsList userId={userId} currentMonth={currentMonth} />
-            </ScrollView>
+            <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={initialLayout}
+                renderTabBar={renderTabBar}
+            />
+            <View style={styles.actionButtons}>
+                <TouchableOpacity style={styles.settleButton} onPress={handleSettleBills}>
+                    <Text style={styles.buttonText}>Settle Bills</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteBills}>
+                    <Text style={styles.buttonText}>Delete Bills</Text>
+                </TouchableOpacity>
+            </View>
             <AddBillButton navigation={navigation} />
             <View style={styles.navigationTab}>
                 <NavigationTab navigation={navigation} />
@@ -65,15 +134,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    scrollViewContent: {
-        flexGrow: 1,
-        paddingBottom: 60,
+    tabContainer: {
+        flex: 1,
+        padding: 10,
     },
-    navigationTab: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
+    tabBar: {
+        backgroundColor: '#fff',
+    },
+    indicator: {
+        backgroundColor: '#000',
+    },
+    label: {
+        color: '#000',
+        fontWeight: 'bold',
     },
     actionButtons: {
         flexDirection: 'row',
@@ -100,6 +173,12 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    navigationTab: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
     },
 });
 
