@@ -48,7 +48,7 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
             </View>
 
             {Object.keys(expenses).length === 0 ? (
-                <Text>No expenses today</Text>
+                null
             ) : (
                 Object.keys(expenses).map(category => (
                     <View key={category} style={styles.categorySection}>
@@ -77,7 +77,7 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
             )}
 
             {Object.keys(incomes).length === 0 ? (
-                <Text>No income today</Text>
+                null
             ) : (
                 Object.keys(incomes).map(category => (
                     <View key={category} style={styles.categorySection}>
@@ -110,15 +110,21 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20,
-        borderColor: "black",
-        borderWidth: 0,
-        margin: 1,
+        padding: 10,
+        marginVertical:5,
+        backgroundColor: '#f8f8f8',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        elevation: 5,
     },
     dateSection: {
         marginVertical: 10,
         flexDirection: "row",
         flex: 1,
+        paddingHorizontal: 5
     },
     dateText: {
         fontSize: 18,
@@ -140,6 +146,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         flex: 2,
+        paddingHorizontal: 10
     },
     cellText: {
         flex: 1,
@@ -170,6 +177,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         justifyContent: "space-between",
         paddingVertical: 5,
+        paddingHorizontal: 5
     },
 });
 
