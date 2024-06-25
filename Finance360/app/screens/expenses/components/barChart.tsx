@@ -140,90 +140,88 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
             (incomeData.length === 0 || incomeData.every(data => data.y === 0))) ? (
                 <Text style={styles.message}>No spending yet!</Text>
             ) : (
-                <View style={styles.chartWrapper}>
-                    <ScrollView horizontal style={styles.scrollView}>
-                        <VictoryChart 
-                            theme={VictoryTheme.material} 
-                            domainPadding={10} 
-                            width={chartWidth} 
-                            height={400}
-                        >
-                            <VictoryAxis
+                <ScrollView horizontal style={styles.scrollView}>
+                    <VictoryChart 
+                        theme={VictoryTheme.material} 
+                        domainPadding={10} 
+                        width={chartWidth} 
+                        height={400}
+                    >
+                        <VictoryAxis
+                            style={{
+                                tickLabels: {
+                                    angle: -45,
+                                    fontSize: 15,
+                                    padding: 15
+                                }
+                            }}
+                            tickFormat={(t) => format(new Date(t), "MMM d")}
+                        />
+                        <VictoryGroup offset={40}>
+                            <VictoryBar
+                                data={expenseData}
+                                x="x"
+                                y="y"
                                 style={{
-                                    tickLabels: {
-                                        angle: -45,
-                                        fontSize: 15,
-                                        padding: 15
-                                    }
-                                }}
-                                tickFormat={(t) => format(new Date(t), "MMM d")}
-                            />
-                            <VictoryGroup offset={40}>
-                                <VictoryBar
-                                    data={expenseData}
-                                    x="x"
-                                    y="y"
-                                    style={{
-                                        data: { fill: "red",
-                                        fillOpacity: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 0.8 : 1,
-                                        strokeWidth: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 3 : 0,
-                                        stroke: "skyblue",
-                                     },
-                                        labels: {
-                                            fill: "black",
-                                            fontWeight: ({ datum }) => (selectedDate && selectedDate == datum.x) ? "bold" : "normal",
-                                            fontSize: 14
-                                        },
-                                    }}
-                                    barWidth={30}
-                                    labels={({datum}) => datum.y ? "$" + datum.y.toFixed(2) : null}
-                                    events={[{
-                                        target: "data",
-                                        eventHandlers: {
-                                            onPress: (evt, clickedProps) => {
-                                                const { datum } = clickedProps;
-                                                setSelectedDate(datum.x);
-                                                setSelectedValue(datum.y);
-                                            }
-                                        }
-                                    }]}
-                                />
-                                <VictoryBar
-                                    data={incomeData}
-                                    x="x"
-                                    y="y"
-                                    style={{
-                                        data: { 
-                                            fill: "green",
-                                            fillOpacity: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 0.8 : 1,
-                                            strokeWidth: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 3 : 0,
-                                            stroke: "skyblue",
+                                    data: { fill: "red",
+                                    fillOpacity: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 0.8 : 1,
+                                    strokeWidth: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 3 : 0,
+                                    stroke: "skyblue",
                                     },
-                                        labels: {
-                                            fill: "black",
-                                            fontWeight: ({ datum }) => (selectedDate && selectedDate == datum.x) ? "bold" : "normal",
-                                            fontSize: 14,
-
-                                        },
-                                    }}
-                                    labels={({datum}) => datum.y ? "$" + datum.y.toFixed(2) : null}
-                                    barWidth={30}
-                                    events={[{
-                                        target: "data",
-                                        eventHandlers: {
-                                            onPress: (evt, clickedProps) => {
-                                                const { datum } = clickedProps;
-                                                setSelectedDate(datum.x);
-                                                setSelectedValue(datum.y);
-                                            }
+                                    labels: {
+                                        fill: "black",
+                                        fontWeight: ({ datum }) => (selectedDate && selectedDate == datum.x) ? "bold" : "normal",
+                                        fontSize: 14
+                                    },
+                                }}
+                                barWidth={30}
+                                labels={({datum}) => datum.y ? "$" + datum.y.toFixed(2) : null}
+                                events={[{
+                                    target: "data",
+                                    eventHandlers: {
+                                        onPress: (evt, clickedProps) => {
+                                            const { datum } = clickedProps;
+                                            setSelectedDate(datum.x);
+                                            setSelectedValue(datum.y);
                                         }
-                                    }]}
-                                />
-                                
-                            </VictoryGroup>
-                        </VictoryChart>
-                    </ScrollView>
-                </View>
+                                    }
+                                }]}
+                            />
+                            <VictoryBar
+                                data={incomeData}
+                                x="x"
+                                y="y"
+                                style={{
+                                    data: { 
+                                        fill: "green",
+                                        fillOpacity: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 0.8 : 1,
+                                        strokeWidth: ({ datum }) => (selectedDate && selectedDate == datum.x && datum.y != 0) ? 3 : 0,
+                                        stroke: "skyblue",
+                                },
+                                    labels: {
+                                        fill: "black",
+                                        fontWeight: ({ datum }) => (selectedDate && selectedDate == datum.x) ? "bold" : "normal",
+                                        fontSize: 14,
+
+                                    },
+                                }}
+                                labels={({datum}) => (datum.y != 0 || (selectedDate && selectedDate == datum.x)) ? "$" + datum.y.toFixed(2) : null}
+                                barWidth={30}
+                                events={[{
+                                    target: "data",
+                                    eventHandlers: {
+                                        onPress: (evt, clickedProps) => {
+                                            const { datum } = clickedProps;
+                                            setSelectedDate(datum.x);
+                                            setSelectedValue(datum.y);
+                                        }
+                                    }
+                                }]}
+                            />
+                            
+                        </VictoryGroup>
+                    </VictoryChart>
+                </ScrollView>
             )}
         </View>
     );

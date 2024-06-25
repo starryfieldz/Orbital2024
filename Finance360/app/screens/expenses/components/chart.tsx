@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native';
 import { VictoryPie, VictoryLabel, VictoryLegend } from 'victory-native';
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
@@ -123,14 +123,14 @@ const Chart = ({ userId, currentDate, viewMode }) => {
 
     return (
         <View>
-            <ScrollView horizontal={true}>
-                <View style = {{width: screenWidth}}>
+            <View>
+                <View style = {{width: screenWidth, marginVertical: 5}}>
                     <PieChart userId={userId} currentDate={currentDate} viewMode={viewMode} />
                 </View>
-                <View style={{width: screenWidth}}>
-                <BarChart userId={userId} currentDate={currentDate} viewMode={viewMode} />
+                <View style={{width: screenWidth, marginVertical: 5}}>
+                    <BarChart userId={userId} currentDate={currentDate} viewMode={viewMode} />
                 </View>
-            </ScrollView>
+            </View>
         </View>
     );
     
