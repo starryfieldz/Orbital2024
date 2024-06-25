@@ -3,8 +3,6 @@ import { VictoryPie, VictoryLabel, VictoryLegend } from 'victory-native';
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
-import PieChart from './pieChart';
-import BarChart from './barChart';
 
 const FilterExpensesForMonth = ({ data, currentDate }) => {
     const expensesForMonth = {};
@@ -40,7 +38,7 @@ function TotalPerCategory(expenses, givenCategory) {
     return output;
 };
 
-const Chart = ({ userId, currentDate, viewMode }) => {
+const PieChart = ({ userId, currentDate, viewMode }) => {
     const screenWidth = Dimensions.get('window').width;
     const [expenses, setExpenses] = useState({});
     const [categories, setCategories] = useState([]);
@@ -122,18 +120,68 @@ const Chart = ({ userId, currentDate, viewMode }) => {
     const sortedData = data.sort((a, b) => b.y - a.y)
 
     return (
-        <View>
-            <ScrollView horizontal={true}>
-                <View style = {{width: screenWidth}}>
-                    <PieChart userId={userId} currentDate={currentDate} viewMode={viewMode} />
+        <View style = {{width: screenWidth}}>
+            {sortedData.length === 0 || sortedData.every(item => item.y === 0) ? (
+                <Text style={styles.message}>No spending yet!</Text>
+            ) : (
+                <View style={{ padding: 0 }}>
+                    <VictoryPie
+                        data={sortedData}
+                        colorScale={categories.map(category => categoryColors[category])}
+                        width={screenWidth}
+                        height={400}
+                        innerRadius={0}
+                        
+                        radius={({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 180 : 150}
+                        // labels={({ datum }) => (selectedCategory && selectedCategory == datum.x) ? `${datum.x}: \n ${datum.y}` : null}
+                        style={{
+                            data: {
+                                fillOpacity: ({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 0.5 : 1,
+                                strokeWidth: ({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 5 : 0,
+                                stroke: "white",
+                            },
+                        }}
+                        labelPosition={'centroid'}
+                        labelComponent={
+                            <CustomLabel
+                                selectedCategory={selectedCategory}
+                                selectedValue={selectedValue}
+                                categories={categories}
+                                categoryColors={categoryColors}
+                            />
+                        }
+                        labelRadius={110}
+                        events={[{
+                            target: "data",
+                            eventHandlers: {
+                                onPress: (evt, clickedProps) => {
+                                    const { datum } = clickedProps;
+                                    setSelectedCategory(datum.x);
+                                    setSelectedValue(datum.y);
+                                }
+                            }
+                        }]}
+                    />
                 </View>
-                <View style={{width: screenWidth}}>
-                <BarChart userId={userId} currentDate={currentDate} viewMode={viewMode} />
-                </View>
-            </ScrollView>
+            )}
         </View>
     );
     
+};
+
+const CustomLabel = ({ x, y, datum, selectedCategory, selectedValue, categories, categoryColors }) => {
+    const isSelected = selectedCategory && selectedCategory === datum.x;
+    const backgroundColor = isSelected ? "black" : 'transparent';
+    const textColor = isSelected ? 'white' : 'black';
+    const padding = 8;
+
+    return (
+        <View style={[styles.labelContainer, { backgroundColor, padding }]}>
+            <Text style={[styles.labelText, { color: textColor }]}>
+                {isSelected ? `${datum.x}: \n $${datum.y}` : null}
+            </Text>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -147,8 +195,21 @@ const styles = StyleSheet.create({
         textAlign: "center",
         paddingBottom: 10,
     },
+    message: {
+        fontSize: 15,
+        textAlign: "center",
+    },
+    labelContainer: {
+        borderRadius: 5,
+        alignSelf: 'center',
+    },
+    labelText: {
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: "bold",
+    },
 });
 
-export default Chart;
+export default PieChart;
 
 
