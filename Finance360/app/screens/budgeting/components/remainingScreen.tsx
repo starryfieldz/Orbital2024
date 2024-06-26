@@ -4,10 +4,9 @@ import ProgressBar from 'react-native-progress/Bar';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { getId } from '../../../../components/commoncodes/commoncodes';
 
-const RemainingScreen = ({ currentMonth }) => {
+const RemainingScreen = ({ userId, currentMonth }) => {
   const [budgets, setBudgets] = useState({});
   const [expenses, setExpenses] = useState({});
-  const userId = getId();
   const db = getDatabase();
 
   useEffect(() => {

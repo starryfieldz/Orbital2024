@@ -133,7 +133,7 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
     }, [userId, currentDate, viewMode]);
     
     const chartWidth = expenseData.length * 100; // Adjust the multiplier to change bar width
-
+    console.log('bar')
     return (
         <View style={styles.chartContainer}>
             {((expenseData.length === 0 || expenseData.every(data => data.y === 0)) && 
@@ -145,7 +145,7 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
                         theme={VictoryTheme.material} 
                         domainPadding={10} 
                         width={chartWidth} 
-                        height={400}
+                        height={350}
                     >
                         <VictoryAxis
                             style={{
@@ -157,7 +157,7 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
                             }}
                             tickFormat={(t) => format(new Date(t), "MMM d")}
                         />
-                        <VictoryGroup offset={40}>
+                        <VictoryGroup offset={45}>
                             <VictoryBar
                                 data={expenseData}
                                 x="x"
@@ -166,7 +166,7 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
                                     data: { fill: "red",
                                     fillOpacity: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 0.8 : 1,
                                     strokeWidth: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 3 : 0,
-                                    stroke: "skyblue",
+                                    stroke: "black",
                                     },
                                     labels: {
                                         fill: "black",
@@ -174,15 +174,20 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
                                         fontSize: 14
                                     },
                                 }}
-                                barWidth={30}
+                                barWidth={33}
                                 labels={({datum}) => datum.y ? "$" + datum.y.toFixed(2) : null}
                                 events={[{
                                     target: "data",
                                     eventHandlers: {
                                         onPress: (evt, clickedProps) => {
                                             const { datum } = clickedProps;
-                                            setSelectedDate(datum.x);
-                                            setSelectedValue(datum.y);
+                                            if (datum.x === selectedDate) {
+                                                setSelectedDate(null);
+                                                setSelectedValue(null);
+                                            } else {
+                                                setSelectedDate(datum.x);
+                                                setSelectedValue(datum.y);
+                                            }
                                         }
                                     }
                                 }]}
@@ -196,7 +201,7 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
                                         fill: "green",
                                         fillOpacity: ({ datum }) => (selectedDate && selectedDate == datum.x) ? 0.8 : 1,
                                         strokeWidth: ({ datum }) => (selectedDate && selectedDate == datum.x && datum.y != 0) ? 3 : 0,
-                                        stroke: "skyblue",
+                                        stroke: "black",
                                 },
                                     labels: {
                                         fill: "black",
@@ -206,14 +211,19 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
                                     },
                                 }}
                                 labels={({datum}) => (datum.y != 0 || (selectedDate && selectedDate == datum.x)) ? "$" + datum.y.toFixed(2) : null}
-                                barWidth={30}
+                                barWidth={33}
                                 events={[{
                                     target: "data",
                                     eventHandlers: {
                                         onPress: (evt, clickedProps) => {
                                             const { datum } = clickedProps;
-                                            setSelectedDate(datum.x);
-                                            setSelectedValue(datum.y);
+                                            if (datum.x === selectedDate) {
+                                                setSelectedDate(null);
+                                                setSelectedValue(null);
+                                            } else {
+                                                setSelectedDate(datum.x);
+                                                setSelectedValue(datum.y);
+                                            }
                                         }
                                     }
                                 }]}
@@ -230,7 +240,6 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
 const styles = StyleSheet.create({
     chartContainer: {
         alignItems: 'center',
-        width: Dimensions.get('window').width,
     },
     chartWrapper: {
         flexDirection: 'row',

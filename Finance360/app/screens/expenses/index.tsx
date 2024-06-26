@@ -1,6 +1,5 @@
 import Title from "../expenses/components/title";
 import { View, ScrollView, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Month from "./components/month";
 import Week from "../expenses/components/week"; // Assuming you have a Week component
 import Chart from "../expenses/components/chart";
@@ -10,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import AddingExpenseButton from "./components/addExpenseButton";
 import ExpenseLog from "../expenses/components/expenseLog";
 import { getId } from "../../../components/commoncodes/commoncodes";
-import { format, subWeeks, subMonths, addMonths, addWeeks, setWeek, setYear } from 'date-fns'; // Use date-fns functions for weeks
+import { subWeeks, subMonths, addMonths, addWeeks } from 'date-fns';
 
 const Expenses = ({ navigation, route }) => {
   const [viewMode, setViewMode] = useState('month'); // 'month' or 'week'
@@ -57,7 +56,7 @@ const Expenses = ({ navigation, route }) => {
     <View style={styles.container}>
       <Title userId={userId} />
       <TouchableOpacity style={styles.toggleButton} onPress={toggleViewMode}>
-        <Text style={styles.toggleButtonText}>{viewMode === 'month' ? 'Weekly View' : 'Monthly View'}</Text>
+        <Text style={styles.toggleButtonText}>{viewMode === 'month' ? 'Monthly View' : 'Weekly View'}</Text>
       </TouchableOpacity>
       {viewMode === 'month' ? (
         <View>
@@ -118,6 +117,9 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontSize:20,
+  },
+  flexContainer: {
+    flex: 1,
   },
 });
 

@@ -41,17 +41,8 @@ const SignupScreen = ({ navigation }) => {
             email,
             password,
             createdAt: new Date().toISOString(),
-            budget: {
-                Needs: { Food: '0' ,
-                        Bills: '0',
-                    Groceries: '0',
-                Transport: '0',
-                Social: '0'},
-                Wants: { Shopping: '0' , 
-                        Others: '0'},
-                Savings: { 'General Savings': '0' },
             },
-        });
+        );
     };
 
     const signUp = async () => {
