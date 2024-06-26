@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Dimensions, ScrollView, } from 'react-native';
-import { VictoryPie, VictoryLabel, VictoryLegend } from 'victory-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { VictoryPie } from 'victory-native';
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
@@ -69,8 +69,6 @@ const PieChart = ({ userId, currentDate, viewMode }) => {
         'rgb(255, 0, 255)'      // Magenta (Violet)
     ];
     
-    
-    
     useEffect(() => {
         const db = getDatabase();
         const expensesRef = ref(db, `users/${userId}/expenses`);
@@ -120,7 +118,7 @@ const PieChart = ({ userId, currentDate, viewMode }) => {
     const sortedData = data.sort((a, b) => b.y - a.y)
 
     return (
-        <View style = {{width: screenWidth}}>
+        <View style={styles.container}>
             {sortedData.length === 0 || sortedData.every(item => item.y === 0) ? (
                 <Text style={styles.message}>No spending yet!</Text>
             ) : (
@@ -129,11 +127,9 @@ const PieChart = ({ userId, currentDate, viewMode }) => {
                         data={sortedData}
                         colorScale={categories.map(category => categoryColors[category])}
                         width={screenWidth}
-                        height={400}
+                        height={350}
                         innerRadius={0}
-                        
-                        radius={({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 180 : 150}
-                        // labels={({ datum }) => (selectedCategory && selectedCategory == datum.x) ? `${datum.x}: \n ${datum.y}` : null}
+                        radius={({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 170 : 140}
                         style={{
                             data: {
                                 fillOpacity: ({ datum }) => (selectedCategory && selectedCategory == datum.x) ? 0.5 : 1,
@@ -156,8 +152,13 @@ const PieChart = ({ userId, currentDate, viewMode }) => {
                             eventHandlers: {
                                 onPress: (evt, clickedProps) => {
                                     const { datum } = clickedProps;
-                                    setSelectedCategory(datum.x);
-                                    setSelectedValue(datum.y);
+                                    if (datum.x === selectedCategory) {
+                                        setSelectedCategory(null);
+                                        setSelectedValue(null);
+                                    } else {
+                                        setSelectedCategory(datum.x);
+                                        setSelectedValue(datum.y);
+                                    }
                                 }
                             }
                         }]}
@@ -189,15 +190,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    headerText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: "center",
-        paddingBottom: 10,
-    },
     message: {
         fontSize: 15,
-        textAlign: "center",
+        textAlign: 'center',
     },
     labelContainer: {
         borderRadius: 5,
@@ -206,10 +201,8 @@ const styles = StyleSheet.create({
     labelText: {
         fontSize: 20,
         textAlign: 'center',
-        fontWeight: "bold",
+        fontWeight: 'bold',
     },
 });
 
 export default PieChart;
-
-

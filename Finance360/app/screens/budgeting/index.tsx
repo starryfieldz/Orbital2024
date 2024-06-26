@@ -7,6 +7,8 @@ import Month from '../expenses/components/month';
 import { subMonths, addMonths } from 'date-fns';
 import { getId } from '../../../components/commoncodes/commoncodes';
 import NavigationTab from "../../../components/navigation/navigation";
+import IncomeByMonth from './components/incomeByMonth'; 
+import AddBudgetDetails from '../addBudgetDetails';
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -31,15 +33,15 @@ const Budgeting = ({ navigation }) => {
   const renderScene = ({ route }) => {
     switch (route.key) {
       case 'plan':
-        return <PlanScreen />;
+        return <PlanScreen userId={userId} currentMonth={currentMonth} />;
       case 'remaining':
-        return <RemainingScreen currentMonth={currentMonth} />;
+        return <RemainingScreen userId={userId} currentMonth={currentMonth} />;
       default:
         return null;
     }
   };
 
-  const renderTabBar = props => (
+  const renderTabBar = (props) => (
     <TabBar
       {...props}
       indicatorStyle={{ backgroundColor: 'black' }}
@@ -55,7 +57,7 @@ const Budgeting = ({ navigation }) => {
         earlierMonth={handleEarlierMonth}
         nextMonth={handleNextMonth}
       />
-
+      <IncomeByMonth userId={userId} currentMonth={currentMonth} />
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
