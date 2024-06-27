@@ -30,7 +30,7 @@ export default function Index() {
                 <Stack.Screen name="Bills" component={Bills} />
                 <Stack.Screen name="Budgeting" component={Budgeting} />
                 <Stack.Screen name="Stock" component={Stock} />
-                {/* <Stack.Screen name="Portfolio" component={Portfolio} /> */}
+                <Stack.Screen name="Portfolio" component={Portfolio} />
                 <Stack.Screen name="AddExpenseDetails" component={AddExpenseDetails} />
                 <Stack.Screen name="AddIncomeDetails" component={AddIncomeDetails} />
                 <Stack.Screen name="EditExpenseDetails" component={EditExpenseDetails} />

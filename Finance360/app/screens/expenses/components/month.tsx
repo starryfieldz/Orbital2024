@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   monthWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#F4E87C',
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#ddd',

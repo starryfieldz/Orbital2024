@@ -48,8 +48,9 @@ const styles = StyleSheet.create({
         padding: 10,
         borderBottomWidth: 1,
         borderColor: "black",
-        borderTopWidth: 1
-    }
+        borderTopWidth: 1,
+        backgroundColor: '#F4E87C',
+    },
 });
 
 export default Title;

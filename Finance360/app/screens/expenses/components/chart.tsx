@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     toggleButton: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#E9FAE3',
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,
@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        paddingVertical: 15
+        paddingVertical: 15,
+        backgroundColor: '#E9FAE3',
     },
 });
 

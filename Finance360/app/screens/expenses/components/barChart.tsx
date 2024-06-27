@@ -240,6 +240,7 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
 const styles = StyleSheet.create({
     chartContainer: {
         alignItems: 'center',
+        backgroundColor: '#E9FAE3',
     },
     chartWrapper: {
         flexDirection: 'row',

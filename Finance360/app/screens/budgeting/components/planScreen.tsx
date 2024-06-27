@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { useNavigation } from '@react-navigation/native';
-import {getId} from '@/components/commoncodes/commoncodes';
+import Progress from './progress';
 
 const PlanScreen = ({ userId, currentMonth }) => {
     const navigation = useNavigation();
@@ -13,7 +13,6 @@ const PlanScreen = ({ userId, currentMonth }) => {
         const budgetRef = ref(db, `users/${userId}/budgets/${currentMonth.toISOString().slice(0, 7)}`);
         const unsubscribe = onValue(budgetRef, (snapshot) => {
             const data = snapshot.val();
-            // console.log('Fetched budget from Firebase:', data);  // Debugging log
             setBudgets(data || {});
         });
         return () => unsubscribe();
@@ -21,15 +20,6 @@ const PlanScreen = ({ userId, currentMonth }) => {
 
     const handleAdd = () => {
         navigation.navigate("AddBudgetDetails", { currentMonth });
-    };
-
-    const handleEdit = (category, subCategory, amount) => {
-        navigation.navigate("EditBudgetDetails", {
-            category,
-            subCategory,
-            amount,
-            currentMonth
-        });
     };
 
     return (
@@ -47,11 +37,14 @@ const PlanScreen = ({ userId, currentMonth }) => {
                             <Text style={styles.categoryTitle}>{category}</Text>
                         </View>
                         {Object.keys(budgets[category]).map((subCategory) => (
-                            <TouchableOpacity key={subCategory} onPress={() => handleEdit(category, subCategory, budgets[category][subCategory])}>
-                                <View style={styles.subCategoryContainer}>
-                                    <Text style={styles.subCategoryText}>{`${subCategory}: ${budgets[category][subCategory]}`}</Text>
-                                </View>
-                            </TouchableOpacity>
+                            <Progress
+                                key={subCategory}
+                                userId={userId}
+                                currentMonth={currentMonth}
+                                category={category}
+                                subCategory={subCategory}
+                                amount={budgets[category][subCategory]}
+                            />
                         ))}
                     </View>
                 ))
@@ -83,16 +76,6 @@ const styles = StyleSheet.create({
     categoryTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-    },
-    subCategoryContainer: {
-        paddingVertical: 8,
-        paddingHorizontal: 10,
-        backgroundColor: '#fff',
-        borderRadius: 4,
-        marginBottom: 5,
-    },
-    subCategoryText: {
-        fontSize: 16,
     },
     createButton: {
         marginTop: 20,
