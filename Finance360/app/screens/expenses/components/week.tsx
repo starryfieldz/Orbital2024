@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   weekWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#E9FAE3',
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#ddd',

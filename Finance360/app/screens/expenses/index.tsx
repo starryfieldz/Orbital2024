@@ -47,7 +47,7 @@ const Expenses = ({ navigation, route }) => {
     } else {
       setViewMode('month');
       setCurrentDate(new Date());
-    } 
+    }
   };
 
   const userId = getId();
@@ -55,17 +55,15 @@ const Expenses = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Title userId={userId} />
-      <TouchableOpacity style={styles.toggleButton} onPress={toggleViewMode}>
+      <TouchableOpacity style={styles.toggleButtonContainer} onPress={toggleViewMode}>
         <Text style={styles.toggleButtonText}>{viewMode === 'month' ? 'Monthly View' : 'Weekly View'}</Text>
       </TouchableOpacity>
       {viewMode === 'month' ? (
-        <View>
-          <Month
-            currentMonth={currentDate}
-            earlierMonth={handleEarlierPeriod}
-            nextMonth={handleNextPeriod}
-          />
-        </View>
+        <Month
+          currentMonth={currentDate}
+          earlierMonth={handleEarlierPeriod}
+          nextMonth={handleNextPeriod}
+        />
       ) : (
         <Week
           currentDate={currentDate}
@@ -74,9 +72,9 @@ const Expenses = ({ navigation, route }) => {
         />
       )}
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <TotalSummary userId={userId} currentDate={currentDate} viewMode={viewMode}/>
-        <Chart userId={userId} currentDate={currentDate} viewMode={viewMode}/>
-        <ExpenseLog userId={userId} currentDate={currentDate} viewMode={viewMode}/>
+        <TotalSummary userId={userId} currentDate={currentDate} viewMode={viewMode} />
+        <Chart userId={userId} currentDate={currentDate} viewMode={viewMode} />
+        <ExpenseLog userId={userId} currentDate={currentDate} viewMode={viewMode} />
       </ScrollView>
       <View style={styles.addExpenseButton}>
         <AddingExpenseButton navigation={navigation} />
@@ -85,13 +83,13 @@ const Expenses = ({ navigation, route }) => {
         <NavigationTab navigation={navigation} />
       </View>
     </View>
-    );
-  };
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#EBF38B',
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -108,18 +106,21 @@ const styles = StyleSheet.create({
     bottom: 80,
     right: 30,
   },
-  toggleButton: {
+  toggleButtonContainer: {
     alignSelf: 'flex-end',
     padding: 10,
-    marginRight: 10,
+    margin: 10,
+    backgroundColor: '#E9FAE3',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
   },
   toggleButtonText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize:20,
-  },
-  flexContainer: {
-    flex: 1,
+    fontSize: 16,
   },
 });
 

@@ -34,8 +34,6 @@ const Budgeting = ({ navigation }) => {
     switch (route.key) {
       case 'plan':
         return <PlanScreen userId={userId} currentMonth={currentMonth} />;
-      case 'remaining':
-        return <RemainingScreen userId={userId} currentMonth={currentMonth} />;
       default:
         return null;
     }
@@ -58,13 +56,7 @@ const Budgeting = ({ navigation }) => {
         nextMonth={handleNextMonth}
       />
       <IncomeByMonth userId={userId} currentMonth={currentMonth} />
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={initialLayout}
-        renderTabBar={renderTabBar}
-      />
+      <PlanScreen userId={userId} currentMonth={currentMonth} />
       <View style={styles.navigationTab}>
         <NavigationTab navigation={navigation} />
       </View>
