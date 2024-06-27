@@ -23,9 +23,12 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#FAF3DD',
+        flex: 1,
     },
     signupContainer: {
-        paddingTop: 10, // Adjust this value to add padding from the bottom
+        paddingTop: 10,
+        backgroundColor: '#FAF3DD', // Adjust this value to add padding from the bottom
     },
 });
 

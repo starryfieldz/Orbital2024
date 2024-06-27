@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { ref, set, get, child} from 'firebase/database';
+import { ref, set, get, child } from 'firebase/database';
 import { DATABASE } from '../../firebaseConfig';
+import { systemWeights } from 'react-native-typography';
 
-
-const Login = ( { navigation }) => {
+const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -17,11 +17,11 @@ const Login = ( { navigation }) => {
     const getCustomErrorMessage = (errorCode) => {
         switch (errorCode) {
             case 'auth/too-many-requests':
-                return 'Too many failed attempts. Try again later.'
+                return 'Too many failed attempts. Try again later.';
             case 'auth/email-already-in-use':
                 return 'This email address is already in use.';
             case 'auth/invalid-email':
-                return 'Please enter a valid email-address.';
+                return 'Please enter a valid email address.';
             case 'auth/user-disabled':
                 return 'This user has been disabled.';
             case 'auth/user-not-found':
@@ -31,7 +31,7 @@ const Login = ( { navigation }) => {
             case 'auth/weak-password':
                 return 'Please enter at least 6 characters.';
             case 'auth/missing-password':
-                return "Please enter a password."
+                return 'Please enter a password.';
             default:
                 return 'An unknown error occurred. Please try again.';
         }
@@ -42,7 +42,6 @@ const Login = ( { navigation }) => {
         setError('');
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
-            /*NEW*/
             const uid = response.user.uid;
             console.log('User UID:', uid);
             const userRef = ref(DB, `users/${uid}`);
@@ -52,18 +51,15 @@ const Login = ( { navigation }) => {
             } else {
                 console.log('No user data available');
             }
-            /*NEW*/
             console.log(response);
             navigation.navigate('Expenses');
         } catch (error) {
-            setError(getCustomErrorMessage(error.code))
+            setError(getCustomErrorMessage(error.code));
             console.log(error);
-        } finally { 
+        } finally {
             setLoading(false);
         }
     };
-
-    
 
     return (
         <View style={styles.container}>
@@ -87,12 +83,11 @@ const Login = ( { navigation }) => {
             {loading ? (
                 <ActivityIndicator size="large" color="red" />
             ) : (
-                <View style={styles.buttonContainer}>
-                    <Button title="Sign In" onPress={signIn} />
-                    <View style={styles.buttonSpacing} />
-                </View>
+                <TouchableOpacity style={styles.signInButton} onPress={signIn}>
+                    <Text style={styles.signInButtonText}>Login</Text>
+                </TouchableOpacity>
             )}
-        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
         </View>
     );
 };
@@ -104,8 +99,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: 20,
         paddingBottom: 200,
+        backgroundColor: '#FAF3DD',
     },
     input: {
+        ...systemWeights.semibold,
         height: 40,
         width: '100%',
         borderColor: 'gray',
@@ -113,16 +110,25 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         paddingHorizontal: 10,
     },
-    buttonContainer: {
-        width: '100%',
+    signInButton: {
+        backgroundColor: '#599682',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginTop: 20,
     },
-    buttonSpacing: {
-        height: 10,
+    signInButtonText: {
+        color: 'white',
+        fontSize: 18,
+        textAlign: 'center',
+        ...systemWeights.bold, // Use systemWeights for custom font style
     },
     errorText: {
         color: 'red',
         marginTop: 20,
+        ...systemWeights.semibold,
     },
 });
 
 export default Login;
+

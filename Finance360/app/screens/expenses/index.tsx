@@ -10,6 +10,7 @@ import AddingExpenseButton from "./components/addExpenseButton";
 import ExpenseLog from "../expenses/components/expenseLog";
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { subWeeks, subMonths, addMonths, addWeeks } from 'date-fns';
+import { systemWeights } from 'react-native-typography';
 
 const Expenses = ({ navigation, route }) => {
   const [viewMode, setViewMode] = useState('month'); // 'month' or 'week'
@@ -89,7 +90,7 @@ const Expenses = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EBF38B',
+    backgroundColor: '#FAF3DD',
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     padding: 10,
     margin: 10,
-    backgroundColor: '#E9FAE3',
+    backgroundColor: '#599682',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -118,8 +119,8 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   toggleButtonText: {
+    ...systemWeights.semibold,
     color: 'black',
-    fontWeight: 'bold',
     fontSize: 16,
   },
 });
