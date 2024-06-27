@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#FAF3DD',
     },
     toggleButton: {
         backgroundColor: '#E9FAE3',

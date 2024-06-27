@@ -103,7 +103,7 @@ const ExpenseLog = ({ userId, currentDate, viewMode }) => {
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#FAF3DD',
     },
     headerText: {
         fontSize: 18,

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { systemWeights } from 'react-native-typography';
 
 const SignupButton = ( { navigation }) => {
     return (
@@ -20,6 +21,7 @@ const styles = StyleSheet.create({
         color: 'gray',
         fontSize: 18,
         textAlign: 'center',
+        ...systemWeights.semibold,
     },
 });
 

@@ -1,4 +1,5 @@
 import {Text, View, StyleSheet} from 'react-native';
+import { systemWeights } from 'react-native-typography';
 
 const Quote = () => {
     return (
@@ -12,8 +13,8 @@ const styles = StyleSheet.create({
       color: 'black',
       fontSize: 20,
       fontWeight: 'bold', 
-      fontStyle: 'italic',
       textAlign: 'center',
+      ...systemWeights.bold,
     },
 
     container: {
