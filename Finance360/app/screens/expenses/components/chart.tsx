@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import PieChart from './pieChart';
 import BarChart from './barChart';
+import Colors from "../../../../constants/Colors";
 
 const Chart = ({ userId, currentDate, viewMode }) => {
     const [displayPieChart, setDisplayPieChart] = useState(true); // State to toggle between PieChart and BarChart
@@ -14,7 +15,7 @@ const Chart = ({ userId, currentDate, viewMode }) => {
         <View style={styles.container}>
             <TouchableOpacity style={styles.toggleButton} onPress={toggleChart}>
                 <Text style={styles.toggleButtonText}>
-                    {displayPieChart ? 'Over Time' : 'By Category'}
+                    {displayPieChart ? 'By Category' : 'Over Time'}
                 </Text>
             </TouchableOpacity>
             <View style={styles.chartContainer}>
@@ -32,13 +33,15 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FAF3DD',
+        backgroundColor: '#E6A63F',
+        flex: 1,
+        margin: 10
     },
     toggleButton: {
-        backgroundColor: '#E9FAE3',
+        backgroundColor: Colors.mainBG,
         paddingVertical: 10,
         paddingHorizontal: 20,
-        borderRadius: 5,
+        borderRadius: 15,
     },
     toggleButtonText: {
         fontSize: 16,
@@ -49,9 +52,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
         paddingVertical: 15,
-        backgroundColor: '#E9FAE3',
+        backgroundColor: Colors.mainBG,
+        borderRadius: 20,   
+        width: "90%",
+        margin: 10
     },
 });
 

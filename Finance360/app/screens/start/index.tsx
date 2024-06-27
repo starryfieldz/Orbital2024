@@ -4,6 +4,7 @@ import Logo from "./components/logo";
 import Quote from "./components/quote";
 import LoginButton from "./components/loginButton";
 import SignupButton from "./components/signupButton";
+import Colors from "../../../constants/Colors";
 
 const Start = ({ navigation }) => {
     return (
@@ -23,13 +24,13 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FAF3DD',
+        backgroundColor: Colors.mainBG,
         flex: 1,
     },
     signupContainer: {
         paddingTop: 10,
-        backgroundColor: '#FAF3DD', // Adjust this value to add padding from the bottom
-    },
+        backgroundColor: Colors.mainBG, 
+    }, 
 });
 
 export default Start;

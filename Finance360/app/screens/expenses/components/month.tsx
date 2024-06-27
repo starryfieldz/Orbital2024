@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { format } from 'date-fns';
+import Colors from "../../../../constants/Colors";
 
 const Month = ({ currentMonth, earlierMonth, nextMonth }) => {
   return (
@@ -26,12 +27,13 @@ const styles = StyleSheet.create({
   monthWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F4E87C',
+    backgroundColor: Colors.mainBG,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    borderWidth: 0,
+    borderColor: 'black',
     paddingHorizontal: 20,
     paddingVertical: 10,
+
   },
   sideButton: {
     paddingHorizontal: 10,

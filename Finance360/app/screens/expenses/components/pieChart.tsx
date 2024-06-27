@@ -3,6 +3,7 @@ import { VictoryPie } from 'victory-native';
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
+import Colors from '../../../../constants/Colors';
 
 const FilterExpensesForMonth = ({ data, currentDate }) => {
     const expensesForMonth = {};
@@ -189,14 +190,14 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FAF3DD',
+        
     },
     message: {
         fontSize: 15,
         textAlign: 'center',
     },
     labelContainer: {
-        borderRadius: 5,
+        borderRadius: 20,
         alignSelf: 'center',
     },
     labelText: {

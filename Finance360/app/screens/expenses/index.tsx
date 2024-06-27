@@ -11,6 +11,7 @@ import ExpenseLog from "../expenses/components/expenseLog";
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { subWeeks, subMonths, addMonths, addWeeks } from 'date-fns';
 import { systemWeights } from 'react-native-typography';
+import Colors from "../../../constants/Colors";
 
 const Expenses = ({ navigation, route }) => {
   const [viewMode, setViewMode] = useState('month'); // 'month' or 'week'
@@ -90,7 +91,7 @@ const Expenses = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAF3DD',
+    backgroundColor: '#E6A63F',
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     padding: 10,
     margin: 10,
-    backgroundColor: '#599682',
+    backgroundColor: Colors.mainBG,
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'fire
 import { ref, set, get, child } from 'firebase/database';
 import { DATABASE } from '../../firebaseConfig';
 import { systemWeights } from 'react-native-typography';
+import Colors from '../../../constants/Colors';
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: 20,
         paddingBottom: 200,
-        backgroundColor: '#FAF3DD',
+        backgroundColor: Colors.mainBG,
     },
     input: {
         ...systemWeights.semibold,
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     signInButton: {
-        backgroundColor: '#599682',
+        backgroundColor: Colors.buttonBG,
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5,

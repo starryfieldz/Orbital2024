@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { format, startOfWeek, endOfWeek } from 'date-fns';
-
+import Colors from "../../../../constants/Colors";
 
 const Week = ({ currentDate, earlierPeriod, nextPeriod }) => {
   // Calculate the start and end dates of the current week
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   weekWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E9FAE3',
+    backgroundColor: Colors.mainBG,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#ddd',

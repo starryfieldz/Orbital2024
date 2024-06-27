@@ -6,7 +6,13 @@
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
-export const Colors = {
+export default {
+
+  mainBG: '#FAF3DD',
+  buttonBG: '#599682',
+  expensesButtonBG: '#ACCBB1',
+  orangeBG: '#E6A63F',
+  
   light: {
     text: '#11181C',
     background: '#fff',

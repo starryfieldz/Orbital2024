@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { format } from 'date-fns';
 import { useNavigation } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/AntDesign";
+import Colors from "../../../../constants/Colors";
 
 function calculateTotalPerDay(expensesOrIncomes) {
     let total = 0.0;
@@ -42,8 +43,8 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
             <View style={styles.dateSection}>
                 <Text style={styles.dateText}>{format(date, "MMM dd")}</Text>
                 <View style={styles.totalsContainer}>
-                    <Text style={styles.totalExpText}>${calculateTotalPerDay(expenses).toFixed(2)}</Text>
-                    <Text style={styles.totalIncText}>${calculateTotalPerDay(incomes).toFixed(2)}</Text>
+                    <Text style={styles.totalExpText}>-${calculateTotalPerDay(expenses).toFixed(2)}</Text>
+                    <Text style={styles.totalIncText}>+${calculateTotalPerDay(incomes).toFixed(2)}</Text>
                 </View>
             </View>
 
@@ -57,7 +58,7 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
                                 
                                 <Text style={styles.cellText}>{category}</Text>
                                 <Text style={styles.cellText}>{expenses[category][id].name}</Text>
-                                <Text style={styles.cellTextRed}>${expenses[category][id].amount.toFixed(2)}</Text>
+                                <Text style={styles.cellTextRed}>-${expenses[category][id].amount.toFixed(2)}</Text>
                                 <TouchableOpacity
                                     onPress={() =>
                                         handleExpensePress(
@@ -86,7 +87,7 @@ const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
                                 
                                 <Text style={styles.cellText}>{category}</Text>
                                 <Text style={styles.cellText}>{incomes[category][id].name}</Text>
-                                <Text style={styles.cellTextGreen}>${incomes[category][id].amount.toFixed(2)}</Text>
+                                <Text style={styles.cellTextGreen}>+${incomes[category][id].amount.toFixed(2)}</Text>
                                 <TouchableOpacity
                                     onPress={() =>
                                         handleIncomePress(
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
     container: {
         padding: 10,
         marginVertical:5,
-        backgroundColor: '#f8f8f8',
+        backgroundColor: Colors.mainBG,
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

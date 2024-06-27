@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { format } from 'date-fns';
 import { View, Text, StyleSheet } from 'react-native';
+import Colors from "../../../../constants/Colors";
 
 function calculateTotalPerMonth({data, currentMonth}) {
     let total = 0.0;
@@ -44,13 +45,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: 10,
         padding: 10,
-        backgroundColor: '#f8f8f8',
-        borderRadius: 10,
+        backgroundColor: Colors.mainBG,
+        borderRadius: 15,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 2,
         elevation: 5,
+        width: '80%'
     },
     label: {
         fontSize: 18,
