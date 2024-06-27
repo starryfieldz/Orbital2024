@@ -9,6 +9,7 @@ import { getId } from '../../../components/commoncodes/commoncodes';
 import NavigationTab from "../../../components/navigation/navigation";
 import IncomeByMonth from './components/incomeByMonth'; 
 import AddBudgetDetails from '../addBudgetDetails';
+import Colors from "../../../constants/Colors";
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -67,7 +68,7 @@ const Budgeting = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.orangeBG,
   },
   navigationTab: {
     position: 'absolute',

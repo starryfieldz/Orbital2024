@@ -2,6 +2,8 @@ import { View, StyleSheet, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { getDatabase, ref, get, onValue } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
+import Colors from "../../../../constants/Colors";
+import { systemWeights } from 'react-native-typography';
 
 const Title = ({userId}) => {
     const [email, setEmail] = useState("");
@@ -32,7 +34,7 @@ const Title = ({userId}) => {
 
     return (
         <View style = {styles.container}> 
-           <Text style = {styles.text}> Hello {email} </Text>
+           <Text style = {styles.text}> Welcome {email} </Text>
         </View>
     );
 }
@@ -42,14 +44,15 @@ const styles = StyleSheet.create({
         color : 'black',
         fontSize : 20,
         fontStyle : 'italic',
-        fontWeight : 'bold',
+        // fontWeight : 'bold',
+        ...systemWeights.bold,
     },
     container : {
         padding: 10,
-        borderBottomWidth: 1,
-        borderColor: "black",
-        borderTopWidth: 1,
-        backgroundColor: '#FAF3DD',
+        // borderBottomWidth: 1,
+        // // borderColor: "black",
+        // borderTopWidth: 1,
+        backgroundColor: Colors.mainBG,
     },
 });
 

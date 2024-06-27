@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
+import Colors from "../../../../constants/Colors";
 
 const AddingExpenseButton = ({ navigation }) => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -112,16 +113,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  cancelButton: {
-    marginTop: 10,
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  cancelText: {
-    color: 'black',
-    fontSize: 18,
-  },
 });
 
 export default AddingExpenseButton;
+

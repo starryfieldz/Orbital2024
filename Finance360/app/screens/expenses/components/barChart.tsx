@@ -3,6 +3,7 @@ import { VictoryBar, VictoryChart, VictoryAxis, VictoryTheme, VictoryGroup } fro
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isWithinInterval, eachDayOfInterval } from 'date-fns';
+import Colors from "../../../../constants/Colors";
 
 const FilterExpensesForMonth = ({ data, currentDate }) => {
     const expensesForMonth = {};
@@ -240,7 +241,7 @@ const BarChart = ({ userId, currentDate, viewMode }) => {
 const styles = StyleSheet.create({
     chartContainer: {
         alignItems: 'center',
-        backgroundColor: '#E9FAE3',
+        backgroundColor: Colors.mainBG,
     },
     chartWrapper: {
         flexDirection: 'row',

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import ExpenseLogByDay from './expenseLogByDay';
 import { format, startOfMonth, endOfMonth, endOfWeek, startOfWeek, isWithinInterval } from 'date-fns';
+import Colors from "../../../../constants/Colors";
 
 const FilterExpensesForMonth = ({data, currentDate}) => {
     const expensesForMonth = {};
@@ -103,7 +104,7 @@ const ExpenseLog = ({ userId, currentDate, viewMode }) => {
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
-        backgroundColor: '#FAF3DD',
+        backgroundColor: Colors.orangeBG,
     },
     headerText: {
         fontSize: 18,
