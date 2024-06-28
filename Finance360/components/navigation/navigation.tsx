@@ -9,8 +9,8 @@ const NavigationTab = ({ navigation }) => {
         { name: "Expenses", icon: "dollar-sign", path: "Expenses" },
         { name: "Budgeting", icon: "calendar-days", path: "Budgeting" },
         { name: "Bills", icon: "credit-card", path: "Bills" },
-        { name: "Portfolio", icon: "briefcase", path: "Portfolio" },
-        { name: "Stock", icon: "arrow-trend-up", path: "Stock" },
+        { name: "Portfolio", icon: "arrow-trend-up", path: "Portfolio" },
+        { name: "News", icon: "arrow-trend-up", path: "News" },
     ];
 
     return (

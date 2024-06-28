@@ -5,14 +5,16 @@ import NavigationTab from '@/components/navigation/navigation';
 // import SearchStock from './SearchStock';
 import StocksList from './components/stocksList';
 import StockData from './components/stockData';
-
+import SearchStock from './components/searchStock';
+import Colors from '../../../constants/Colors'
 
 const Portfolio = ({ navigation }) => {
   const userId = getId();
 
   return (
     <View style={styles.container}>
-      <StocksList userId={userId} />
+      <SearchStock navigation={navigation} />
+      <StocksList navigation={navigation} userId={userId} />
       <View style={styles.navigationTab}>
         <NavigationTab navigation={navigation} />
       </View>
@@ -23,7 +25,7 @@ const Portfolio = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.darkOrangeBG,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,

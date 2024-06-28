@@ -4,7 +4,7 @@ import Expenses from "./screens/expenses";
 import Start from "./screens/start";
 import Portfolio from "./screens/portfolio";
 import Bills from "./screens/bills";
-import Stock from './screens/stock';
+import News from './screens/news';
 import Budgeting from './screens/budgeting';
 import SignupScreen from "./screens/signupScreen";
 import AddExpenseDetails from "./screens/addExpenseDetails";
@@ -16,7 +16,7 @@ import AddBudgetDetails from './screens/addBudgetDetails';
 import EditBudgetDetails from './screens/editBudgetDetails';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import StockGraph from './screens/stockGraph';
 
 const Stack = createStackNavigator();
 
@@ -29,7 +29,7 @@ export default function Index() {
                 <Stack.Screen name="Expenses" component={Expenses} />
                 <Stack.Screen name="Bills" component={Bills} />
                 <Stack.Screen name="Budgeting" component={Budgeting} />
-                <Stack.Screen name="Stock" component={Stock} />
+                <Stack.Screen name="News" component={News} />
                 <Stack.Screen name="Portfolio" component={Portfolio} />
                 <Stack.Screen name="AddExpenseDetails" component={AddExpenseDetails} />
                 <Stack.Screen name="AddIncomeDetails" component={AddIncomeDetails} />
@@ -38,6 +38,7 @@ export default function Index() {
                 <Stack.Screen name="AddBillDetails" component={AddBillDetails} />
                 <Stack.Screen name="AddBudgetDetails" component={AddBudgetDetails} />
                 <Stack.Screen name="EditBudgetDetails" component={EditBudgetDetails} />
+                <Stack.Screen name="StockGraph" component={StockGraph} />
             </Stack.Navigator>
     );
 }

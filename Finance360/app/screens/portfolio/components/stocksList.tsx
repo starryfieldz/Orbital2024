@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, Text, FlatList, ScrollView } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import StockData from './stockData';
+import Icon from 'react-native-vector-icons/Entypo';
 
-const StocksList = ({ userId }) => {
+const StocksList = ({ navigation, userId }) => {
     const [stocks, setStocks] = useState({});
 
     useEffect(() => {
@@ -17,32 +18,60 @@ const StocksList = ({ userId }) => {
         });
     }, [userId]);
 
+    const renderItem = ({ item }) => (
+        <StockData key={item} navigation={navigation} symbol={item} />
+    );
+
     return (
         <View style={styles.container}>
-            <View>
-                <Text> Favourited Stocks </Text>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>
+                    Favourited Stocks
+                    <Icon name="star-outlined" size={18} />
+                </Text>
             </View>
-            <ScrollView>
-                {Object.keys(stocks).length === 0 ? (
-                    <Text style={styles.noStocksText}>No stocks</Text>
-                ) : (
-                    Object.keys(stocks).map((symbol) => (
-                        <StockData key={symbol} symbol={symbol} />
-                    ))
-                )}
-            </ScrollView>
+            {Object.keys(stocks).length === 0 ? (
+                <Text style={styles.noStocksText}>No stocks</Text>
+            ) : (
+                <FlatList
+                    data={Object.keys(stocks)}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item}
+                    contentContainerStyle={styles.listContainer}
+                />                
+            )}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        width: '100%',
+        flex:1,
+        padding: 10,
+        width: "95%",
+        borderRadius: 15,
+        marginVertical: 30,
+
+    },
+    header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: 10,
+        width: "80%",
+    },
+    headerText: {
+        color: "white",
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    listContainer: {
+        flexGrow: 1,
+        paddingBottom: 50,
     },
     noStocksText: {
         fontSize: 16,
-        color: '#999',
+        color: 'white',
         textAlign: 'center',
         marginTop: 20,
     },
