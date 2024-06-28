@@ -5,6 +5,7 @@ import CustomDatePicker from './datetimepicker';
 import { ref, set, get, push } from 'firebase/database';
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { DATABASE } from '../../firebaseConfig';
+import Colors from '../../../constants/Colors';
 
 const AddExpenseDetails = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
@@ -142,6 +143,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: Colors.mainBG
   },
   label: {
     fontSize: 18,

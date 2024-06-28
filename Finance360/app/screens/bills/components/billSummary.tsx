@@ -1,10 +1,9 @@
-import { View, Text, ScrollView, StyleSheet } from "react-native";
-import Month from "../../expenses/components/month";
+import { View, Text, StyleSheet } from "react-native";
 import React, { useEffect, useState } from 'react';
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { format } from "date-fns";
 import { getDatabase, ref, onValue } from 'firebase/database';
-
+import Colors from '../../../../constants/Colors';
 
 const filterBillsForMonth = ({bills, currentMonth}) => {
     return bills ? Object.keys(bills)
@@ -52,15 +51,17 @@ const BillSummary = ( {userId, currentMonth} ) => {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
+        alignSelf: 'center',
         marginVertical: 10,
         padding: 10,
-        backgroundColor: '#f8f8f8',
-        borderRadius: 10,
+        backgroundColor: Colors.mainBG,
+        borderRadius: 15,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 2,
-        elevation: 5,
+        // elevation: 5,
+        width: "60%",
     },
     title: {
         flexDirection: "row",

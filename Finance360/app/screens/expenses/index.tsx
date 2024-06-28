@@ -91,7 +91,7 @@ const Expenses = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E6A63F',
+    backgroundColor: Colors.orangeBG,
   },
   scrollViewContent: {
     flexGrow: 1,

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { useNavigation } from '@react-navigation/native';
 import Progress from './progress';
+import Colors from '../../../../constants/Colors';
 
 const PlanScreen = ({ userId, currentMonth }) => {
     const navigation = useNavigation();
@@ -23,7 +24,7 @@ const PlanScreen = ({ userId, currentMonth }) => {
     };
 
     return (
-        <ScrollView style={styles.container} >
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
             {Object.keys(budgets).length === 0 ? (
                 <View style={styles.noBudgetContainer}>
                     <TouchableOpacity style={styles.createButton} onPress={handleAdd}>
@@ -54,7 +55,8 @@ const PlanScreen = ({ userId, currentMonth }) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
+    scrollViewContent: {
+        flexGrow: 1,
         padding: 20,
     },
     noBudgetContainer: {

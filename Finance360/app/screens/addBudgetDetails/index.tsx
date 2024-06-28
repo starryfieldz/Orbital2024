@@ -3,6 +3,7 @@ import { View, TextInput, Button, Text, StyleSheet, Alert, ScrollView } from 're
 import { ref, set } from 'firebase/database';
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { DATABASE } from '../../firebaseConfig';
+import Colors from '../../../constants/Colors';
 
 const AddBudgetDetails = ({ navigation, route }) => {
     const [food, setFood] = useState('');
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         paddingBottom: 20,
+        backgroundColor: Colors.mainBG,
     },
     label: {
         fontSize: 18,
