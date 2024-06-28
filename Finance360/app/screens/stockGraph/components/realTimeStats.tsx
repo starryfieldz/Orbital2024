@@ -7,7 +7,7 @@ import { systemWeights } from 'react-native-typography';
 
 
 
-const StockData = ({ navigation, symbol }) => {
+const RealTimeStats = ({ symbol }) => {
     const [stock, setStock] = useState(null);
 
     useEffect(() => {
@@ -39,12 +39,6 @@ const StockData = ({ navigation, symbol }) => {
         return stock.price > stock.open ? 'green' : 'red';
     };
 
-    const handlePress = () => {
-        if (stock) {
-            navigation.navigate('StockGraph', { symbol: stock.symbol });
-        }
-    };
-
     return (
         <View style={styles.container}>
             {stock ? (
@@ -54,9 +48,6 @@ const StockData = ({ navigation, symbol }) => {
                             {stock.symbol}
                         </Text>
                         <Text style={styles.nameText}>{stock.name}</Text>
-                        <TouchableOpacity onPress={handlePress}>
-                            <Icon name="chevron-right" size={25} />
-                        </TouchableOpacity>
                     </View>
                     <View style={styles.lower}>
                         <View style={styles.details}>
@@ -109,13 +100,12 @@ const StockData = ({ navigation, symbol }) => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         alignItems: 'flex-start',
         justifyContent: 'center',
         backgroundColor: Colors.mainBG,
         padding: 10,
         borderRadius: 10,
-        borderColor: "brown",
-        borderWidth: 5,
         marginVertical: 5,
         marginHorizontal: 10,
     },
@@ -172,4 +162,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default StockData;
+export default RealTimeStats;
