@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import CustomDatePicker from './datetimepicker';
 import { ref, set, push } from 'firebase/database';
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { DATABASE } from '../../firebaseConfig';
+import Colors from '@/constants/Colors';
 
 const AddBillDetails = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
@@ -146,7 +147,7 @@ const AddBillDetails = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.label}>Due Date:</Text>
       <CustomDatePicker date={date} setDate={setDate} />
 
@@ -185,7 +186,7 @@ const AddBillDetails = ({ navigation }) => {
           <Button title="Save Bill" onPress={saveBill} />
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -218,6 +219,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: Colors.mainBG,
   },
   label: {
     fontSize: 18,

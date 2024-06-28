@@ -42,16 +42,15 @@ const SearchStock = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20,
+        width: "80%",
+        padding: 10,
         backgroundColor: Colors.mainBG,
         borderRadius: 15,
         paddingHorizontal: 20,
-        borderWidth: 5,
-        borderColor: "brown"
     },
     input: {
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: Colors.darkOrangeBG,
         backgroundColor: "white",
         padding: 10,
         marginBottom: 10,

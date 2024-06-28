@@ -12,7 +12,7 @@ export default {
   buttonBG: '#599682',
   expensesButtonBG: '#ACCBB1',
   orangeBG: '#FECDAA',
-  darkOrangeBG: '#E6A63F',
+  darkOrangeBG: '#D16D3B',
   
   light: {
     text: '#11181C',

@@ -57,7 +57,8 @@ const PlanScreen = ({ userId, currentMonth }) => {
 const styles = StyleSheet.create({
     scrollViewContent: {
         flexGrow: 1,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingBottom: 70,
     },
     noBudgetContainer: {
         alignItems: 'center',
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     },
     categoryContainer: {
         marginBottom: 20,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: Colors.darkOrangeBG,
         borderRadius: 8,
         padding: 10,
     },
@@ -78,6 +79,7 @@ const styles = StyleSheet.create({
     categoryTitle: {
         fontSize: 18,
         fontWeight: 'bold',
+        color: "white"
     },
     createButton: {
         marginTop: 20,

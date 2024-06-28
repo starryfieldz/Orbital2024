@@ -91,7 +91,9 @@ const ExpenseLog = ({ userId, currentDate, viewMode }) => {
         <ScrollView style={styles.container}>
             <Text style = {styles.headerText}> See all records for {format(currentDate, "MMM yyyy")}</Text>
             {allDates.length == 0 ? (
-                <Text style = {styles.message}>No expenses/incomes yet!</Text>
+                <View style={styles.textContainer}>
+                    <Text style = {styles.message}>No expenses/incomes yet!</Text>
+                </View>
             ) : (
                 allDates.map((date) => (
                     <ExpenseLogByDay key={date} date = {date} expenses = {expenses[date]} incomes = {incomes[date]} />
@@ -105,6 +107,13 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
         backgroundColor: Colors.orangeBG,
+        marginHorizontal: 10
+    },
+    textContainer: {
+        padding: 10,
+        marginVertical:5,
+        backgroundColor: Colors.mainBG,
+        borderRadius: 10,
     },
     headerText: {
         fontSize: 18,

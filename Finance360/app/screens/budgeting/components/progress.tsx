@@ -4,6 +4,7 @@ import ProgressBar from 'react-native-progress/Bar';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';  // Make sure you have the vector-icons library installed
+import Colors from '@/constants/Colors';
 
 const Progress = ({ userId, currentMonth, category, subCategory, amount }) => {
   const navigation = useNavigation();
@@ -91,9 +92,9 @@ const styles = StyleSheet.create({
   subCategoryContainer: {
     paddingVertical: 8,
     paddingHorizontal: 10,
-    backgroundColor: '#fff',
     borderRadius: 4,
     marginBottom: 5,
+    backgroundColor: Colors.mainBG,
   },
   subCategoryHeader: {
     flexDirection: 'row',

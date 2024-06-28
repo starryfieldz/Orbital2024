@@ -3,14 +3,14 @@ import { View, Text, StyleSheet } from "react-native";
 import { Link } from "expo-router";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import Colors from '@/constants/Colors';
 const NavigationTab = ({ navigation }) => {
     const tabs = [
         { name: "Expenses", icon: "dollar-sign", path: "Expenses" },
         { name: "Budgeting", icon: "calendar-days", path: "Budgeting" },
         { name: "Bills", icon: "credit-card", path: "Bills" },
         { name: "Portfolio", icon: "arrow-trend-up", path: "Portfolio" },
-        { name: "News", icon: "arrow-trend-up", path: "News" },
+        { name: "News", icon: "newspaper", path: "News" },
     ];
 
     return (
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         paddingVertical: 10,
-        backgroundColor: '#fff', // Adjust background as needed
+        backgroundColor: Colors.mainBG, // Adjust background as needed
     },
     link: {
         flex: 1,
