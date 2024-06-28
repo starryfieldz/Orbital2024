@@ -5,6 +5,7 @@ import { differenceInDays, format } from 'date-fns';
 import { getDatabase, ref, onValue, update, push, set } from 'firebase/database';
 import MyCheckBox from '../../../../components/MyCheckBox/MyCheckBox';
 import ConfirmAddToExpense from './confirmAddToExpense'; // Adjust the import path as per your project structure
+import Colors from '@/constants/Colors';
 
 const filterBillsForMonth = ({ bills, currentMonth, settled }) => {
   return bills
@@ -188,16 +189,16 @@ const BillsList = ({ userId, currentMonth, settled }) => {
 
       <View style={styles.header}>
         <View style={styles.cell}>
-          <Text style={styles.billText}>Select</Text>
+          <Text style={styles.headerText}>Select</Text>
         </View>
         <View style={styles.cell}>
-          <Text style={styles.billText}>Name</Text>
+          <Text style={styles.headerText}>Name</Text>
         </View>
         <View style={styles.cell}>
-          <Text style={styles.billText}>Amount</Text>
+          <Text style={styles.headerText}>Amount</Text>
         </View>
         <View style={styles.cell}>
-          <Text style={styles.billText}>Due Date</Text>
+          <Text style={styles.headerText}>Due Date</Text>
         </View>
         <View style={styles.cell}></View>
       </View>
@@ -275,11 +276,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    backgroundColor: Colors.darkOrangeBG,
+    borderRadius: 10,
   },
   cell: {
     flex: 1,
+  },
+  headerText: {
+    fontSize: 15,
+    paddingVertical: 5,
+    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
   },
   billText: {
     fontSize: 15,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet, Alert, ScrollView } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import CustomDatePicker from './datetimepicker';
 import { ref, set, get, push } from 'firebase/database';
@@ -75,7 +75,7 @@ const AddExpenseDetails = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.label}>Date:</Text>
       <CustomDatePicker date={date} setDate={setDate} />
 
@@ -110,7 +110,7 @@ const AddExpenseDetails = ({ navigation }) => {
       <View style={styles.buttonContainer}>
         <Button title="Save Expense" onPress={saveExpense} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

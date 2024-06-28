@@ -91,7 +91,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import axios from 'axios';
 import NavigationTab from '../../../components/navigation/navigation';
-
+import Colors from '@/constants/Colors';
 const News = ({ navigation }) => {
   const [newsArticles, setNewsArticles] = useState([]);
 
@@ -145,12 +145,14 @@ const News = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.orangeBG
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 16,
+    backgroundColor: Colors.mainBG
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -162,6 +164,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
+    backgroundColor: Colors.mainBG
   },
   articleTitle: {
     fontSize: 18,

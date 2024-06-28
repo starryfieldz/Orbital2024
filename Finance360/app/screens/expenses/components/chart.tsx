@@ -35,13 +35,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: Colors.orangeBG,
         flex: 1,
-        margin: 10
+        marginHorizontal: 0
     },
     toggleButton: {
         backgroundColor: Colors.mainBG,
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 15,
+        margin: 5
     },
     toggleButtonText: {
         fontSize: 16,
@@ -52,11 +53,10 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 15,
+        padding: 15,
         backgroundColor: Colors.mainBG,
         borderRadius: 20,   
         width: "90%",
-        margin: 10
     },
 });
 

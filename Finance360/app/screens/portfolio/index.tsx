@@ -25,7 +25,7 @@ const Portfolio = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkOrangeBG,
+    backgroundColor: Colors.orangeBG,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,

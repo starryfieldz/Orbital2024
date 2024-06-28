@@ -7,6 +7,9 @@ import RealTimeStats from './components/realTimeStats';
 import Icon from 'react-native-vector-icons/Entypo';
 import { getDatabase, ref, set, remove, onValue, get } from 'firebase/database';
 import { getId } from '@/components/commoncodes/commoncodes';
+import Colors from '@/constants/Colors';
+import Graph from "./components/graph";
+import ViewButtons from './components/viewButtons';
 
 const StockGraph = ({ navigation, route }) => {
     const { symbol } = route.params;
@@ -14,6 +17,8 @@ const StockGraph = ({ navigation, route }) => {
     const ytd = format(subDays(new Date(), 1), "yyyy-MM-dd");
     const [isFavourited, setIsFavourited] = useState(false); // State to track favourited status
     const userId = getId();
+    const [currentDate, setCurrentDate] = useState(subDays(new Date(), 1))
+    const [viewMode, setViewMode] = useState("day");
 
     // Function to toggle favourite status
     const toggleFavourite = async () => {
@@ -45,61 +50,46 @@ const StockGraph = ({ navigation, route }) => {
         };
 
         fetchData();
-    }, [userId, symbol]);
-
-    useEffect(() => {
-        const getHistoricalData = async () => {
-            if (!symbol) return;
-
-            const apiUrl = `https://gethistoricalchartdata-mykgt7vlwq-uc.a.run.app/` +
-                `?symbol=${symbol}&from=${ytd}&to=${ytd}`;
-            axios.get(apiUrl)
-                .then(response => {
-                    if (response.data && response.data.length > 0) {
-                        const historicalDataFetched = response.data;
-                        setHistoricalData(historicalDataFetched);
-                    } else {
-                        alert('Stock symbol not found.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching stock price:', error);
-                    alert('Error fetching stock price. Please try again.');
-                });
-        };
-
-        getHistoricalData();
-    }, [userId, symbol]);
+    }, [userId, symbol, currentDate, viewMode]);
 
     const points: GraphPoint[] = Object.values(historicalData).map((item) => ({
         date: new Date(item.date),
         value: item.close,
     }));
+
     const [selectedPoint, setSelectedPoint] = useState<GraphPoint>(points[points.length - 1]);
     const onPointSelected = (point) => {
         setSelectedPoint(point);
     };
 
+    const onDayPress = () => {
+        console.log("day view");
+    }
+
+    const onMonthPress = () => {
+        console.log("month view");
+    }
+
+    const onYearsPress = () => {
+        console.log("years view");
+    }
+
     return (
         <ScrollView style={styles.container}>
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={styles.text}>{symbol} Real Time Data</Text>
+                <Text style={styles.text}> Real Time Data</Text>
                 <TouchableOpacity onPress={toggleFavourite}>
                     <Icon name={isFavourited ? "star" : "star-outlined"} size={25} />
                 </TouchableOpacity>
             </View>
             <RealTimeStats symbol={symbol} />
-            <Text> {ytd} </Text>
-            <Text> ${selectedPoint?.value.toFixed(2)} </Text>
-            <LineGraph
-                style={{ width: "100%", height: 300 }}
-                points={points}
-                animated={true}
-                color="#0000FF"
-                gradientFillColors={[`#00000FF`, "#87ceeb"]}
-                enablePanGesture
-                onPointSelected={onPointSelected}
-            />
+            <Text style={styles.dateText}> {format(currentDate,  "yyyy-MM-dd")}</Text>
+            <Graph symbol={symbol} date={currentDate}/>
+            <ViewButtons 
+                onDayPress={onDayPress}
+                onMonthPress={onMonthPress}
+                onYearsPress={onYearsPress}
+                viewMode={viewMode}/>
         </ScrollView>
     );
 };
@@ -107,12 +97,19 @@ const StockGraph = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginHorizontal: 30
+        padding: 10,
+        backgroundColor: Colors.orangeBG,
+        paddingBottom: 100
     },
     text: {
         fontSize: 24,
         fontWeight: 'bold',
     },
+    dateText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        paddingLeft: 10,
+    }
 });
 
 export default StockGraph;

@@ -96,10 +96,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   tabBar: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.mainBG,
   },
   indicator: {
-    backgroundColor: '#000',
+    backgroundColor: Colors.darkOrangeBG,
   },
   label: {
     color: '#000',

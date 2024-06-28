@@ -17,6 +17,7 @@ import EditBudgetDetails from './screens/editBudgetDetails';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import StockGraph from './screens/stockGraph';
+import Colors from '@/constants/Colors';
 
 const Stack = createStackNavigator();
 
@@ -46,5 +47,6 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
+    backgroundColor: "black"
   },
 });
