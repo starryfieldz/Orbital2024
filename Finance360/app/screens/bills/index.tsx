@@ -8,6 +8,7 @@ import BillSummary from './components/billSummary';
 import BillsList from './components/billsList';
 import AddBillButton from './components/addBillButton';
 import NavigationTab from '../../../components/navigation/navigation';
+import Colors from '../../../constants/Colors';
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -88,7 +89,7 @@ const Bills = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.orangeBG,
   },
   tabContainer: {
     flex: 1,

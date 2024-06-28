@@ -11,7 +11,8 @@ export default {
   mainBG: '#FAF3DD',
   buttonBG: '#599682',
   expensesButtonBG: '#ACCBB1',
-  orangeBG: '#E6A63F',
+  orangeBG: '#FECDAA',
+  darkOrangeBG: '#E6A63F',
   
   light: {
     text: '#11181C',

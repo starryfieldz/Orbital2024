@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlanScreen from './components/planScreen';
-import RemainingScreen from './components/remainingScreen';
 import Month from '../expenses/components/month';
 import { subMonths, addMonths } from 'date-fns';
 import { getId } from '../../../components/commoncodes/commoncodes';
@@ -10,8 +9,6 @@ import NavigationTab from "../../../components/navigation/navigation";
 import IncomeByMonth from './components/incomeByMonth'; 
 import AddBudgetDetails from '../addBudgetDetails';
 import Colors from "../../../constants/Colors";
-
-const initialLayout = { width: Dimensions.get('window').width };
 
 const Budgeting = ({ navigation }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -28,7 +25,6 @@ const Budgeting = ({ navigation }) => {
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: 'plan', title: 'Plan' },
-    { key: 'remaining', title: 'Remaining' },
   ]);
 
   const renderScene = ({ route }) => {
@@ -39,15 +35,6 @@ const Budgeting = ({ navigation }) => {
         return null;
     }
   };
-
-  const renderTabBar = (props) => (
-    <TabBar
-      {...props}
-      indicatorStyle={{ backgroundColor: 'black' }}
-      style={{ backgroundColor: 'white' }}
-      labelStyle={{ color: 'black' }}
-    />
-  );
 
   return (
     <View style={styles.container}>

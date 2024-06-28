@@ -5,6 +5,10 @@ import Icon from 'react-native-vector-icons/Entypo';
 import StockData from "../portfolio/components/stockData";
 
 
-const AddStockPage = ({route, navigation}) => {
-    
-}
+// const AddStockPage = ({route, navigation}) => {
+//     return (
+//         <View>
+//             <StockData 
+//         </View>
+//     )
+// }
