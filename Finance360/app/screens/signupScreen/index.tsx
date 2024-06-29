@@ -3,6 +3,7 @@ import { View, TextInput, Button, Text, StyleSheet, ActivityIndicator, Touchable
 import { FIREBASE_AUTH, DATABASE } from '../../firebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { ref, set } from 'firebase/database';
+import Colors from '../../../constants/Colors';
 
 const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -116,6 +117,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: 20,
         paddingBottom: 200,
+        backgroundColor: Colors.mainBG,
     },
     input: {
         height: 40,

@@ -49,7 +49,7 @@ const FilterIncomesForWeek = ({ data, currentDate }) => {
     return expensesForWeek;
 };
 
-const ExpenseLog = ({ userId, currentDate, viewMode }) => {
+const ExpenseLog = ({ navigation, userId, currentDate, viewMode }) => {
     const [expenses, setExpenses] = useState({});
     const [incomes, setIncomes] = useState({});
 
@@ -96,7 +96,7 @@ const ExpenseLog = ({ userId, currentDate, viewMode }) => {
                 </View>
             ) : (
                 allDates.map((date) => (
-                    <ExpenseLogByDay key={date} date = {date} expenses = {expenses[date]} incomes = {incomes[date]} />
+                    <ExpenseLogByDay navigation={navigation} key={date} date = {date} expenses = {expenses[date]} incomes = {incomes[date]} />
                 ))
             )}
         </ScrollView>

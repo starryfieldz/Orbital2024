@@ -5,6 +5,7 @@ import CustomDatePicker from '../addIncomeDetails/datetimepicker';
 import { ref, update, remove } from 'firebase/database';
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { DATABASE } from '../../firebaseConfig';
+import Colors from '../../../constants/Colors';
 
 const EditExpenseDetails = ({ route, navigation }) => {
   const { expenseId, expenseDate, category, expenseName, amountSpent } = route.params;
@@ -184,6 +185,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: Colors.mainBG,
   },
   label: {
     fontSize: 18,
