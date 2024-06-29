@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 import Colors from '../../../../constants/Colors';
+import { systemWeights } from 'react-native-typography';
 
 const SearchStock = ({ navigation }) => {
     const [symbol, setSymbol] = useState('');
@@ -34,6 +35,7 @@ const SearchStock = ({ navigation }) => {
                 placeholder="Enter stock symbol"
                 value={symbol}
                 onChangeText={setSymbol}
+                placeholderTextColor="gray"
             />
             <Button title="Search" onPress={searchStock} />
         </View>
@@ -54,6 +56,8 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         padding: 10,
         marginBottom: 10,
+        ...systemWeights.bold,
+        color: 'black',
     },
 });
 
