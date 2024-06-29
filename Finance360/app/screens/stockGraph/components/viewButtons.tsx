@@ -10,13 +10,13 @@ const ViewButtons = ({ onDayPress, onMonthPress, onYearsPress, viewMode }) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={[styles.button, {backgroundColor: viewMode==="day" ? Colors.darkOrangeBG : Colors.mainBG}]} onPress={onDayPress}>
-                <Text style={styles.buttonText}>For the day</Text>
+                <Text style={[styles.buttonText, {color: viewMode==="day" ? "white" : "black"}]}>For the day</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.button, {backgroundColor: viewMode==="month" ? Colors.darkOrangeBG : Colors.mainBG}]} onPress={onMonthPress}>
-                <Text style={styles.buttonText}>For the month</Text>
+                <Text style={[styles.buttonText, {color: viewMode==="month" ? "white" : "black"}]}>For the month</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.button, {backgroundColor: viewMode==="years" ? Colors.darkOrangeBG : Colors.mainBG}]} onPress={onYearsPress}>
-                <Text style={styles.buttonText}>Past 5 years</Text>
+                <Text style={[styles.buttonText, {color: viewMode==="years" ? "white" : "black"}]}>Past 5 years</Text>
             </TouchableOpacity>
         </View>
     );
@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     buttonText: {
-        color: 'black',
         fontSize: 16,
         fontWeight: 'bold',
     },

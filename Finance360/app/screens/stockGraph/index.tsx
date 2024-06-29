@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { LineGraph, GraphPoint } from 'react-native-graph';
-import { format, subDays } from 'date-fns';
+import { format, subDays, isBefore } from 'date-fns';
 import RealTimeStats from './components/realTimeStats';
 import Icon from 'react-native-vector-icons/Entypo';
 import { getDatabase, ref, set, remove, onValue, get } from 'firebase/database';
@@ -10,6 +10,7 @@ import { getId } from '@/components/commoncodes/commoncodes';
 import Colors from '@/constants/Colors';
 import Graph from "./components/graph";
 import ViewButtons from './components/viewButtons';
+import CalendarPicker from 'react-native-calendar-picker';
 
 const StockGraph = ({ navigation, route }) => {
     const { symbol } = route.params;
@@ -19,6 +20,7 @@ const StockGraph = ({ navigation, route }) => {
     const userId = getId();
     const [currentDate, setCurrentDate] = useState(subDays(new Date(), 1))
     const [viewMode, setViewMode] = useState("day");
+    const [isCalendarVisible, setIsCalendarVisible] = useState(false)
 
     // Function to toggle favourite status
     const toggleFavourite = async () => {
@@ -74,6 +76,16 @@ const StockGraph = ({ navigation, route }) => {
         console.log("years view");
     }
 
+    const onDateChange = (date) => {
+        const today = new Date();
+        if (isBefore(date, today)) {
+            setCurrentDate(date);
+            setIsCalendarVisible(false);
+        } else {
+            Alert.alert("Invalid Date", "Please select a date before today.");
+        }
+    }
+
     return (
         <ScrollView style={styles.container}>
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -83,7 +95,19 @@ const StockGraph = ({ navigation, route }) => {
                 </TouchableOpacity>
             </View>
             <RealTimeStats symbol={symbol} />
-            <Text style={styles.dateText}> {format(currentDate,  "yyyy-MM-dd")}</Text>
+            <TouchableOpacity onPress={() => setIsCalendarVisible(!isCalendarVisible)}>
+                <Text style={styles.dateText}>
+                    {format(currentDate, "yyyy-MM-dd")}
+                    <Icon name="calendar" size={25}/>
+                </Text>
+            </TouchableOpacity>
+            {isCalendarVisible && (
+                <CalendarPicker
+                    onDateChange={onDateChange}
+                    selectedStartDate={currentDate}
+                    maxDate={subDays(new Date(), 1)}
+                />
+            )}
             <Graph symbol={symbol} date={currentDate}/>
             <ViewButtons 
                 onDayPress={onDayPress}
