@@ -23,6 +23,12 @@ const AddBudgetDetails = ({ navigation, route }) => {
             return;
         }
 
+        // Validation
+        if (!food || !bills || !groceries || !transport || !social || !shopping || !others || !savings) {
+            Alert.alert("Error", "All fields are required.");
+            return;
+        }
+
         const budgetData = {
             Needs: {
                 Food: parseFloat(food) || 0,
@@ -135,8 +141,8 @@ const AddBudgetDetails = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
         paddingBottom: 20,
+        paddingHorizontal: 10,
         backgroundColor: Colors.mainBG,
     },
     label: {

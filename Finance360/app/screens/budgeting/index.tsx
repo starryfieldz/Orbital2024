@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.orangeBG,
+    padding: 10,
   },
   navigationTab: {
     position: 'absolute',
