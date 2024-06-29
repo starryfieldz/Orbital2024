@@ -92,17 +92,19 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Linking } from 'r
 import axios from 'axios';
 import NavigationTab from '../../../components/navigation/navigation';
 import Colors from '@/constants/Colors';
+
 const News = ({ navigation }) => {
   const [newsArticles, setNewsArticles] = useState([]);
+  const [country, setCountry] = useState('us'); // default to US news
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get('https://newsapi.org/v2/top-headlines', {
+        const response = await axios.get(`https://newsapi.org/v2/top-headlines`, {
           params: {
+            country: country,
             category: 'business',
             apiKey: 'b4ee4af9b9c64710be2504dbceaeb049',
-            language: "en",
           },
         });
         setNewsArticles(response.data.articles || []);
@@ -112,16 +114,37 @@ const News = ({ navigation }) => {
     };
 
     fetchNews();
-  }, []);
+  }, [country]); // fetch news whenever the country changes
 
   const openArticle = (url) => {
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
+  };
+
+  const convertToSGT = (utcDate) => {
+    const date = new Date(utcDate);
+    const offset = 8 * 60; // Singapore is UTC+8
+    const sgtDate = new Date(date.getTime() + offset * 60 * 1000);
+    return sgtDate.toLocaleString(); // or any desired format
   };
 
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.header}>Financial News</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, country === 'us' && styles.activeButton]}
+            onPress={() => setCountry('us')}
+          >
+            <Text style={[styles.buttonText, country === 'us' && styles.activeButtonText]}>USA News</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, country === 'sg' && styles.activeButton]}
+            onPress={() => setCountry('sg')}
+          >
+            <Text style={[styles.buttonText, country === 'sg' && styles.activeButtonText]}>SG News</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {newsArticles.map((article, index) => (
@@ -132,6 +155,7 @@ const News = ({ navigation }) => {
           >
             <Text style={styles.articleTitle}>{article.title}</Text>
             <Text style={styles.articleDescription}>{article.description}</Text>
+            <Text style={styles.articleDate}>{convertToSGT(article.publishedAt)}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -145,14 +169,38 @@ const News = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.orangeBG
+    backgroundColor: Colors.orangeBG,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 16,
-    backgroundColor: Colors.mainBG
+    backgroundColor: Colors.mainBG,
+    paddingVertical: 8,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  button: {
+    marginHorizontal: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: Colors.mainBG,
+    borderRadius: 8,
+  },
+  activeButton: {
+    backgroundColor: '#ff8c00', // Darker shade for active button
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  activeButtonText: {
+    color: 'white', // Change text color for active button
   },
   scrollViewContent: {
     flexGrow: 1,
@@ -164,7 +212,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
-    backgroundColor: Colors.mainBG
+    backgroundColor: Colors.mainBG,
   },
   articleTitle: {
     fontSize: 18,
@@ -173,6 +221,10 @@ const styles = StyleSheet.create({
   },
   articleDescription: {
     fontSize: 14,
+  },
+  articleDate: {
+    fontSize: 12,
+    color: '#888',
   },
   navigationTab: {
     position: 'absolute',
@@ -183,5 +235,3 @@ const styles = StyleSheet.create({
 });
 
 export default News;
-
-
