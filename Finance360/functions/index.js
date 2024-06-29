@@ -20,7 +20,7 @@ exports.helloWorld = onRequest((request, response) => {
 });
 
 const fetchHistoricalChartData = (symbol, from, to) => {
-  const KEY = "zuhVrxezRiRVgIYA2xt6XezbDreLv47a";
+  const KEY = "KMfksEX2fTXfpdTegzyJ5XbvpKTG2DK5";
   const PATH = `/api/v3/historical-chart/5min/${symbol}?`+
    `from=${from}&to=${to}&apikey=${KEY}`;
   return new Promise((resolve, reject) => {
@@ -73,7 +73,7 @@ exports.getHistoricalChartData = onRequest(async (request, response) => {
 
 const fetchStockData = (symbol) => {
   return new Promise((resolve, reject) => {
-    const KEY = "zuhVrxezRiRVgIYA2xt6XezbDreLv47a";
+    const KEY = "KMfksEX2fTXfpdTegzyJ5XbvpKTG2DK5";
     const options = {
       hostname: "financialmodelingprep.com",
       port: 443,

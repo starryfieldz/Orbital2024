@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { getId } from "../../../components/commoncodes/commoncodes";
 import { DATABASE } from '../../firebaseConfig';
-import { ref, update } from 'firebase/database';
+import { ref, update, remove } from 'firebase/database';
+import Colors from '../../../constants/Colors';
 
 const EditBudgetDetails = ({ route, navigation }) => {
   const { category, subCategory, amount, currentMonth } = route.params;
   const [newAmount, setNewAmount] = useState(amount.toString());
   const userId = getId();
-  const formattedDate = new Date(currentMonth).toISOString().slice(0, 7); // Parse the string to a Date object and format it
+  const formattedDate = route.params.currentMonth.slice(0, 7);
 
   const saveBudget = async () => {
     if (!userId) {
@@ -23,7 +24,9 @@ const EditBudgetDetails = ({ route, navigation }) => {
     const budgetRef = ref(DATABASE, `users/${userId}/budgets/${formattedDate}/${category}`);
 
     try {
+
       await update(budgetRef, { [subCategory]: parseFloat(newAmount) });
+
       console.log("Budget updated successfully");
       navigation.navigate('Budgeting'); // Navigate back to the Budgeting screen
     } catch (error) {
@@ -68,6 +71,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: Colors.mainBG,
   },
   label: {
     fontSize: 18,
@@ -90,4 +94,3 @@ const styles = StyleSheet.create({
 });
 
 export default EditBudgetDetails;
-

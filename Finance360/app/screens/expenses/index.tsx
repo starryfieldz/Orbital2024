@@ -76,7 +76,7 @@ const Expenses = ({ navigation, route }) => {
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <TotalSummary userId={userId} currentDate={currentDate} viewMode={viewMode} />
         <Chart userId={userId} currentDate={currentDate} viewMode={viewMode} />
-        <ExpenseLog userId={userId} currentDate={currentDate} viewMode={viewMode} />
+        <ExpenseLog navigation={navigation} userId={userId} currentDate={currentDate} viewMode={viewMode} />
       </ScrollView>
       <View style={styles.addExpenseButton}>
         <AddingExpenseButton navigation={navigation} />

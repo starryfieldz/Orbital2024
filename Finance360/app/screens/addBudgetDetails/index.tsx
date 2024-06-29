@@ -15,7 +15,7 @@ const AddBudgetDetails = ({ navigation, route }) => {
     const [others, setOthers] = useState('');
     const [savings, setSavings] = useState('');
     const userId = getId();
-    const currentMonth = route.params.currentMonth.toISOString().slice(0, 7); // Format YYYY-MM
+    const currentMonth = route.params.currentMonthString.slice(0, 7); // Format YYYY-MM
 
     const saveBudget = async () => {
         if (!userId) {

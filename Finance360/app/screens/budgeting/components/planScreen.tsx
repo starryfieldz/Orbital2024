@@ -9,6 +9,7 @@ const PlanScreen = ({ userId, currentMonth }) => {
     const navigation = useNavigation();
     const [budgets, setBudgets] = useState({});
     const db = getDatabase();
+    const currentMonthString = currentMonth.toISOString();
 
     useEffect(() => {
         const budgetRef = ref(db, `users/${userId}/budgets/${currentMonth.toISOString().slice(0, 7)}`);
@@ -20,7 +21,7 @@ const PlanScreen = ({ userId, currentMonth }) => {
     }, [currentMonth, userId]);
 
     const handleAdd = () => {
-        navigation.navigate("AddBudgetDetails", { currentMonth });
+        navigation.navigate("AddBudgetDetails", { currentMonthString });
     };
 
     return (

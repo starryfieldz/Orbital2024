@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
-import { useNavigation } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/AntDesign";
 import Colors from "../../../../constants/Colors";
 
@@ -15,8 +14,7 @@ function calculateTotalPerDay(expensesOrIncomes) {
     return total;
 }
 
-const ExpenseLogByDay = ({ date, expenses = {}, incomes = {} }) => {
-    const navigation = useNavigation();
+const ExpenseLogByDay = ({ navigation, date, expenses = {}, incomes = {} }) => {
 
     const handleExpensePress = (expenseId, expenseCategory, expenseName, amountSpent) => {
         navigation.navigate('EditExpenseDetails', {

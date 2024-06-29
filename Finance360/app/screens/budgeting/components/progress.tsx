@@ -40,11 +40,12 @@ const Progress = ({ userId, currentMonth, category, subCategory, amount }) => {
   }, [currentMonth, userId]);
 
   const handleEdit = () => {
-    navigation.navigate("EditBudgetDetails", {
-      category,
-      subCategory,
-      amount,
-      currentMonth
+    const currentMonthString = currentMonth instanceof Date ? currentMonth.toISOString() : currentMonth; 
+    navigation.navigate('EditBudgetDetails', { 
+      category, 
+      subCategory, 
+      amount, 
+      currentMonth: currentMonthString,
     });
   };
 
