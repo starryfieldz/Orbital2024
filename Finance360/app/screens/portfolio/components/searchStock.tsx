@@ -34,7 +34,7 @@ const SearchStock = ({ navigation }) => {
                 style={styles.input}
                 placeholder="Enter stock symbol"
                 value={symbol}
-                onChangeText={setSymbol}
+                onChangeText={(text) => setSymbol(text.toUpperCase())}
                 placeholderTextColor="gray"
             />
             <Button title="Search" onPress={searchStock} />
