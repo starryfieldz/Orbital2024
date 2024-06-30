@@ -13,15 +13,14 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.dillonph.Finance360"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.dillonph.Finance360"
+      "package": "com.starryfieldz.Finance360"
     },
     "web": {
       "bundler": "metro",
@@ -39,7 +38,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "a74aae2c-5e66-4693-9825-4b3d0c768737"
+        "projectId": "076786dd-f628-4fb8-ab42-f61b4c50f267"
       }
     }
   }
