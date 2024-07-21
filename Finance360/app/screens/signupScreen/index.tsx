@@ -8,6 +8,7 @@ import Colors from '../../../constants/Colors';
 const SignupScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const auth = FIREBASE_AUTH;
@@ -41,9 +42,9 @@ const SignupScreen = ({ navigation }) => {
         await set(userRef, {
             email,
             password,
+            username,
             createdAt: new Date().toISOString(),
-            },
-        );
+        });
     };
 
     const signUp = async () => {
@@ -56,6 +57,13 @@ const SignupScreen = ({ navigation }) => {
             setLoading(false);
             return;
         }
+
+        if (username.trim() === '') {
+            setError('Please enter a username.');
+            setLoading(false);
+            return;
+        }
+
         try {
             const response = await createUserWithEmailAndPassword(auth, email, password);
             const uid = response.user.uid;
@@ -64,7 +72,7 @@ const SignupScreen = ({ navigation }) => {
             await initializeUserBudget(uid);
 
             console.log(response);
-            navigation.navigate('Budgeting');
+            navigation.navigate('Expenses');
         } catch (error) {
             setError(getCustomErrorMessage(error.code));
             console.log(error);
@@ -75,6 +83,14 @@ const SignupScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <TextInput
+                style={styles.input}
+                placeholder="Username"
+                value={username}
+                onChangeText={setUsername}
+                autoCapitalize="none"
+                placeholderTextColor="gray"
+            />
             <TextInput
                 style={styles.input}
                 placeholder="Email"

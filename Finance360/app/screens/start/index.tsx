@@ -15,7 +15,6 @@ const Start = ({ navigation }) => {
             <View style={styles.signupContainer}>
                 <SignupButton navigation={navigation} />
             </View>
-            <Text> stocks </Text>
         </View>
 
     );
