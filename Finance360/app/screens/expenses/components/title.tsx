@@ -1,5 +1,4 @@
-import { View, StyleSheet, Text, TextInput, TouchableOpacity, Modal, Button } from 'react-native';
-import PropTypes from 'prop-types';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Modal, Button, Alert } from 'react-native';
 import { getDatabase, ref, get, set } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 import Colors from "../../../../constants/Colors";
@@ -35,6 +34,11 @@ const Title = ({ userId }) => {
     }, [userId]);
 
     const saveUsername = async () => {
+        if (newUsername.trim() === "") {
+            Alert.alert("Invalid Entry", "Username cannot be empty.");
+            return;
+        }
+
         try {
             const database = getDatabase();
             const usernameRef = ref(database, `users/${userId}/username`);
