@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import Logo from "./components/logo";
 import Quote from "./components/quote";
 import LoginButton from "./components/loginButton";
@@ -15,6 +15,7 @@ const Start = ({ navigation }) => {
             <View style={styles.signupContainer}>
                 <SignupButton navigation={navigation} />
             </View>
+            <Text> stocks </Text>
         </View>
 
     );
