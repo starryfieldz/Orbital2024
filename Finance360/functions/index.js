@@ -165,3 +165,53 @@ exports.getFinancialNews = onRequest(async (request, response) => {
   }
 });
 
+const fetchMonthHistoricalChartData = (symbol, from, to) => {
+  const KEY = "KMfksEX2fTXfpdTegzyJ5XbvpKTG2DK5";
+  const PATH = `/api/v3/historical-price-full/${symbol}?`+
+  `from=${from}&to=${to}&apikey=${KEY}`;
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: "financialmodelingprep.com",
+      port: 443,
+      path: PATH,
+      method: "GET",
+    };
+
+    const req = https.request(options, (res) => {
+      let data = "";
+
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      res.on("end", () => {
+        resolve(data);
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error);
+    });
+
+    req.end();
+  });
+};
+
+exports.getMonthHistoricalChartData = onRequest(async (request, response) => {
+  logger.info("Fetching monthly historical chart data", {structuredData: true});
+
+  const {symbol, from, to} = request.query;
+
+  if (!symbol || !from || !to) {
+    response.status(400).send("Missing required parameters: symbol, from, to");
+    return;
+  }
+
+  try {
+    const data = await fetchMonthHistoricalChartData(symbol, from, to);
+    response.status(200).send(data);
+  } catch (error) {
+    logger.error("Error fetching monthly historical chart data:", error);
+    response.status(500).send("Error fetching monthly historical chart data");
+  }
+});

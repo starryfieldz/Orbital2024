@@ -11,6 +11,7 @@ import Colors from '@/constants/Colors';
 import Graph from "./components/graph";
 import ViewButtons from './components/viewButtons';
 import CalendarPicker from 'react-native-calendar-picker';
+import GraphContainer from "./components/graphContainer";
 
 const StockGraph = ({ navigation, route }) => {
     const { symbol } = route.params;
@@ -54,26 +55,24 @@ const StockGraph = ({ navigation, route }) => {
         fetchData();
     }, [userId, symbol, currentDate, viewMode]);
 
-    const points: GraphPoint[] = Object.values(historicalData).map((item) => ({
-        date: new Date(item.date),
-        value: item.close,
-    }));
+    // const points: GraphPoint[] = Object.values(historicalData).map((item) => ({
+    //     date: new Date(item.date),
+    //     value: item.close,
+    // }));
 
-    const [selectedPoint, setSelectedPoint] = useState<GraphPoint>(points[points.length - 1]);
-    const onPointSelected = (point) => {
-        setSelectedPoint(point);
-    };
+    // const [selectedPoint, setSelectedPoint] = useState<GraphPoint>(points[points.length - 1]);
+    // const onPointSelected = (point) => {
+    //     setSelectedPoint(point);
+    // };
 
     const onDayPress = () => {
+        setViewMode("day");
         console.log("day view");
     }
 
     const onMonthPress = () => {
+        setViewMode('month');
         console.log("month view");
-    }
-
-    const onYearsPress = () => {
-        console.log("years view");
     }
 
     const onDateChange = (date) => {
@@ -95,7 +94,8 @@ const StockGraph = ({ navigation, route }) => {
                 </TouchableOpacity>
             </View>
             <RealTimeStats symbol={symbol} />
-            <TouchableOpacity onPress={() => setIsCalendarVisible(!isCalendarVisible)}>
+            <GraphContainer symbol={symbol} viewMode={viewMode} />
+            {/* <TouchableOpacity onPress={() => setIsCalendarVisible(!isCalendarVisible)}>
                 <Text style={styles.dateText}>
                     {format(currentDate, "yyyy-MM-dd")}
                     <Icon name="calendar" size={25}/>
@@ -108,11 +108,10 @@ const StockGraph = ({ navigation, route }) => {
                     maxDate={subDays(new Date(), 1)}
                 />
             )}
-            <Graph symbol={symbol} date={currentDate}/>
+            <Graph symbol={symbol} date={currentDate}/> */}
             <ViewButtons 
                 onDayPress={onDayPress}
                 onMonthPress={onMonthPress}
-                onYearsPress={onYearsPress}
                 viewMode={viewMode}/>
         </ScrollView>
     );
