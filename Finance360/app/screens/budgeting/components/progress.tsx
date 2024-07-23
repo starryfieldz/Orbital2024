@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import ProgressBar from 'react-native-progress/Bar';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome';  // Make sure you have the vector-icons library installed
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '@/constants/Colors';
 
 const Progress = ({ userId, currentMonth, category, subCategory, amount }) => {
@@ -40,11 +40,11 @@ const Progress = ({ userId, currentMonth, category, subCategory, amount }) => {
   }, [currentMonth, userId]);
 
   const handleEdit = () => {
-    const currentMonthString = currentMonth instanceof Date ? currentMonth.toISOString() : currentMonth; 
-    navigation.navigate('EditBudgetDetails', { 
-      category, 
-      subCategory, 
-      amount, 
+    const currentMonthString = currentMonth instanceof Date ? currentMonth.toISOString() : currentMonth;
+    navigation.navigate('EditBudgetDetails', {
+      category,
+      subCategory,
+      amount,
       currentMonth: currentMonthString,
     });
   };
@@ -58,11 +58,16 @@ const Progress = ({ userId, currentMonth, category, subCategory, amount }) => {
   const calculateProgress = () => {
     const budget = parseFloat(amount || 0);
     const spent = parseFloat(expenses[subCategory] || 0);
-    return budget === 0 ? 0 : spent / budget;
+    if (budget === 0) {
+      return spent > 0 ? 1 : 0;
+    }
+    return spent / budget;
   };
 
   const getProgressColor = (progress) => {
-    if (progress < 0.5) {
+    if (progress >= 1) {
+      return '#f44336'; // Red
+    } else if (progress < 0.5) {
       return '#4caf50'; // Green
     } else if (progress < 0.75) {
       return '#ffeb3b'; // Yellow
@@ -114,4 +119,3 @@ const styles = StyleSheet.create({
 });
 
 export default Progress;
-

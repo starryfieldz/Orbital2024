@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import PlanScreen from './components/planScreen';
 import Month from '../expenses/components/month';
 import { subMonths, addMonths } from 'date-fns';

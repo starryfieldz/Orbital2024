@@ -95,24 +95,12 @@ const StockGraph = ({ navigation, route }) => {
             </View>
             <RealTimeStats symbol={symbol} />
             <GraphContainer symbol={symbol} viewMode={viewMode} />
-            {/* <TouchableOpacity onPress={() => setIsCalendarVisible(!isCalendarVisible)}>
-                <Text style={styles.dateText}>
-                    {format(currentDate, "yyyy-MM-dd")}
-                    <Icon name="calendar" size={25}/>
-                </Text>
-            </TouchableOpacity>
-            {isCalendarVisible && (
-                <CalendarPicker
-                    onDateChange={onDateChange}
-                    selectedStartDate={currentDate}
-                    maxDate={subDays(new Date(), 1)}
-                />
-            )}
-            <Graph symbol={symbol} date={currentDate}/> */}
-            <ViewButtons 
-                onDayPress={onDayPress}
-                onMonthPress={onMonthPress}
-                viewMode={viewMode}/>
+            <View style={{position: "absolute", bottom: 5}}>
+                <ViewButtons 
+                    onDayPress={onDayPress}
+                    onMonthPress={onMonthPress}
+                    viewMode={viewMode}/>
+            </View>
         </ScrollView>
     );
 };
