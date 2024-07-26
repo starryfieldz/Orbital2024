@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { LineGraph, GraphPoint } from 'react-native-graph';
 import { format, subDays, isBefore } from 'date-fns';
 import RealTimeStats from './components/realTimeStats';
 import Icon from 'react-native-vector-icons/Entypo';
 import { getDatabase, ref, set, remove, onValue, get } from 'firebase/database';
 import { getId } from '@/components/commoncodes/commoncodes';
 import Colors from '@/constants/Colors';
-import Graph from "./components/graph";
-import ViewButtons from './components/viewButtons';
-import CalendarPicker from 'react-native-calendar-picker';
 import GraphContainer from "./components/graphContainer";
+import ViewButtons from './components/viewButtons';
 
 const StockGraph = ({ navigation, route }) => {
     const { symbol } = route.params;
@@ -55,16 +52,6 @@ const StockGraph = ({ navigation, route }) => {
         fetchData();
     }, [userId, symbol, currentDate, viewMode]);
 
-    // const points: GraphPoint[] = Object.values(historicalData).map((item) => ({
-    //     date: new Date(item.date),
-    //     value: item.close,
-    // }));
-
-    // const [selectedPoint, setSelectedPoint] = useState<GraphPoint>(points[points.length - 1]);
-    // const onPointSelected = (point) => {
-    //     setSelectedPoint(point);
-    // };
-
     const onDayPress = () => {
         setViewMode("day");
         console.log("day view");
@@ -86,31 +73,36 @@ const StockGraph = ({ navigation, route }) => {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                <Text style={styles.text}> Real Time Data</Text>
-                <TouchableOpacity onPress={toggleFavourite}>
-                    <Icon name={isFavourited ? "star" : "star-outlined"} size={25} />
-                </TouchableOpacity>
-            </View>
-            <RealTimeStats symbol={symbol} />
-            <GraphContainer symbol={symbol} viewMode={viewMode} />
-            <View style={{position: "absolute", bottom: 5}}>
-                <ViewButtons 
+        <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollContent}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <Text style={styles.text}> Real Time Data</Text>
+                    <TouchableOpacity onPress={toggleFavourite}>
+                        <Icon name={isFavourited ? "star" : "star-outlined"} size={25} />
+                    </TouchableOpacity>
+                </View>
+                <RealTimeStats symbol={symbol} />
+                <GraphContainer symbol={symbol} viewMode={viewMode} />
+            </ScrollView>
+            <View style={styles.fixedButtons}>
+                <ViewButtons
                     onDayPress={onDayPress}
                     onMonthPress={onMonthPress}
-                    viewMode={viewMode}/>
+                    viewMode={viewMode}
+                />
             </View>
-        </ScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
         backgroundColor: Colors.orangeBG,
-        paddingBottom: 100
+    },
+    scrollContent: {
+        padding: 10,
+        paddingBottom: 100,
     },
     text: {
         fontSize: 24,
@@ -120,7 +112,14 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         paddingLeft: 10,
-    }
+    },
+    fixedButtons: {
+        position: 'absolute',
+        bottom: 10,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+    },
 });
 
 export default StockGraph;

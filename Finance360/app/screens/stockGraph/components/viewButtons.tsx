@@ -19,11 +19,11 @@ const ViewButtons = ({ onDayPress, onMonthPress, viewMode }) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
     },
     button: {
         padding: 10,
         borderRadius: 5,
+        marginHorizontal: 30
     },
     buttonText: {
         fontSize: 16,

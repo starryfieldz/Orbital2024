@@ -6,7 +6,6 @@ import { subMonths, addMonths } from 'date-fns';
 import { getId } from '../../../components/commoncodes/commoncodes';
 import NavigationTab from "../../../components/navigation/navigation";
 import IncomeByMonth from './components/incomeByMonth'; 
-import AddBudgetDetails from '../addBudgetDetails';
 import Colors from "../../../constants/Colors";
 
 const Budgeting = ({ navigation }) => {

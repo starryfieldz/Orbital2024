@@ -82,7 +82,7 @@ const Login = ({ navigation }) => {
                 placeholderTextColor="gray"
             />
             {loading ? (
-                <ActivityIndicator size="large" color="red" />
+                <ActivityIndicator size="large" color="red" testID="loading-indicator" />
             ) : (
                 <TouchableOpacity style={styles.signInButton} onPress={signIn}>
                     <Text style={styles.signInButtonText}>Login</Text>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 18,
         textAlign: 'center',
-        ...systemWeights.bold, // Use systemWeights for custom font style
+        ...systemWeights.bold,
     },
     errorText: {
         color: 'red',
@@ -132,4 +132,5 @@ const styles = StyleSheet.create({
 });
 
 export default Login;
+
 

@@ -13,7 +13,7 @@ const AddBudgetDetails = ({ navigation, route }) => {
     const [social, setSocial] = useState('');
     const [shopping, setShopping] = useState('');
     const [others, setOthers] = useState('');
-    const [savings, setSavings] = useState('');
+    // const [savings, setSavings] = useState('');
     const userId = getId();
     const currentMonth = route.params.currentMonthString.slice(0, 7); // Format YYYY-MM
 
@@ -24,7 +24,7 @@ const AddBudgetDetails = ({ navigation, route }) => {
         }
 
         // Validation
-        if (!food || !bills || !groceries || !transport || !social || !shopping || !others || !savings) {
+        if (!food || !bills || !groceries || !transport || !social || !shopping || !others) {
             Alert.alert("Error", "All fields are required.");
             return;
         }
@@ -34,10 +34,12 @@ const AddBudgetDetails = ({ navigation, route }) => {
                 Food: parseFloat(food) || 0,
                 Social: parseFloat(social) || 0,
                 Transport: parseFloat(transport) || 0,
+                Bills: parseFloat(bills) || 0,
+                Groceries: parseFloat(groceries) || 0
             },
-            Savings: {
-                Savings: parseFloat(savings) || 0,
-            },
+            // Savings: {
+            //     Savings: parseFloat(savings) || 0,
+            // },
             Wants: {
                 Others: parseFloat(others) || 0,
                 Shopping: parseFloat(shopping) || 0,
@@ -117,15 +119,6 @@ const AddBudgetDetails = ({ navigation, route }) => {
                 style={styles.input}
                 onChangeText={setOthers}
                 value={others}
-                placeholder="Enter amount"
-                keyboardType="numeric"
-                placeholderTextColor="gray"
-            />
-            <Text style={styles.label}>Savings (Savings)</Text>
-            <TextInput
-                style={styles.input}
-                onChangeText={setSavings}
-                value={savings}
                 placeholder="Enter amount"
                 keyboardType="numeric"
                 placeholderTextColor="gray"
