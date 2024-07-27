@@ -1,7 +1,7 @@
 import {Image, View, StyleSheet} from 'react-native';
 
 const Logo = ()  => {
-    return <View style = {styles.container}>
+    return <View style = {styles.container} testID="logo">
         <Image source={require('../../../../assets/images/Logo.png')}
         style={{width: 250, height: 250}} />
     </View>;

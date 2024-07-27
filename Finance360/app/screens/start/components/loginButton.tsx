@@ -5,7 +5,7 @@ import { systemWeights } from 'react-native-typography';
 const LoginButton = ({ navigation }) => {
     return (
         <View style={styles.button}>
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")} testID='loginButton'>
                 <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
         </View>
