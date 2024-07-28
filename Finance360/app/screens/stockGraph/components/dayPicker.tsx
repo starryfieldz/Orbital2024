@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { format, subDays, isBefore } from 'date-fns';
 import Icon from 'react-native-vector-icons/Entypo';
 import CalendarPicker from 'react-native-calendar-picker';
-import Colors from '@/constants/Colors';
 
 const DayPicker = ({ currentDate, onDateChange }) => {
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
@@ -27,6 +26,7 @@ const DayPicker = ({ currentDate, onDateChange }) => {
             </TouchableOpacity>
             {isCalendarVisible && (
                 <CalendarPicker
+                    testID="calendar-picker"
                     onDateChange={handleDateChange}
                     selectedStartDate={currentDate}
                     maxDate={subDays(new Date(), 1)}

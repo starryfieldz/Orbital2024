@@ -17,6 +17,7 @@ const NavigationTab = ({ navigation }) => {
         <View style={styles.container}>
             {tabs.map((tab) => (
                 <TouchableOpacity
+                    testID={tab.name}
                     key = {tab.name}
                     style = {styles.link}
                     onPress = {() => navigation.navigate(tab.path)}>
